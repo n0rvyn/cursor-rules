@@ -9,26 +9,21 @@ alwaysApply: true
 ---
 
 ## ✨ Checklist Workflow
-1. **After analyzing prompts**  
-   - If no `DEV_CHECKLIST.md` exists in root, create it immediately with proper title
-   - Break down requirements into tasks: `- [ ] <verb + task>`
+1. **After analyzing the prompt**  
+   - If `/DEV_CHECKLIST.md` is missing, create it with the title "Development Checklist"
+   - Parse the prompt; for each task append: `- [ ] <verb + task>`
 
-2. **Every time code is modified**  
-   - Mark completed tasks as `- [x]` + "✅ YYYY-MM-DD"
-   - Add new TODOs as new unchecked items
+2. **Whenever you modify code**  
+   - Tick relevant items `- [x]` and append "✅ YYYY-MM-DD"
+   - Add new unchecked items for fresh TODOs
 
-3. **Section ordering**
+3. **Sections order**  
+   ```
+   ### Features
+   ### Refactors
+   ### Tests
+   ### Documentation
+   ### Chores
+   ```
 
-```
-### Features
-
-### Refactors
-
-### Tests
-
-### Documentation
-
-### Chores
-```
-
-4. **Historical record**: Never delete completed tasks.
+4. **Never delete** completed items; history must stay for diff review
