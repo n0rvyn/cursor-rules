@@ -24,6 +24,19 @@ cp examples/sample-requirements.txt your-project/requirements.txt  # Python
 ### 3. Verify Setup
 Test with a simple prompt: `@filename refactor this function`
 
+**Quick Health Check:**
+```bash
+# Check if files were copied correctly
+ls -la .cursor/rules/          # Should show *.mdc files
+ls -la .cursor/environments/   # Should show development.json, production.json
+
+# Test rule syntax (basic check)
+head -5 .cursor/rules/*.mdc | grep "---"  # Should show YAML front matter
+
+# Reload rules in Cursor
+# Ctrl+Shift+P → "Cursor: Reload Rules"
+```
+
 ## 📁 Project Structure
 
 ```
@@ -61,6 +74,48 @@ Test with a simple prompt: `@filename refactor this function`
 - **300-security.mdc**: Security best practices and compliance
 
 ### Environment Configurations
+
+**🎯 Use different AI behavior for different contexts:**
+
+```bash
+# Development (more permissive, faster iteration)
+export CURSOR_ENV=development
+
+# Production (conservative, careful suggestions)
+export CURSOR_ENV=production
+```
+
+**📝 Customize Models for Your Usage:**
+
+Update `.cursor/environments/development.json`:
+```json
+{
+  "model": "your-preferred-model",    // e.g., "gpt-4", "claude-3-sonnet"
+  "temperature": 0.1,                 // 0.05-0.2 range
+  "contextLines": 300,                // Adjust based on needs
+  "enableDebugMode": true
+}
+```
+
+Update `.cursor/environments/production.json`:
+```json
+{
+  "model": "your-most-reliable-model", // e.g., "gpt-4", "claude-3-opus" 
+  "temperature": 0.05,                 // Very conservative
+  "contextLines": 150,                 // Less context for efficiency
+  "strictMode": true,
+  "requireReview": true                // Force human review
+}
+```
+
+**🔍 Find Your Available Models:**
+- Check the model dropdown in Cursor chat
+- Common names: `"gpt-4"`, `"gpt-4-turbo"`, `"claude-3-sonnet"`, `"claude-3-opus"`
+
+**💡 Environment Strategy:**
+- **Development**: Daily coding, experimenting, debugging
+- **Production**: Critical code changes, security-sensitive work
+
 ```bash
 # Development (verbose, debug-enabled)
 export CURSOR_ENV=development
@@ -166,6 +221,41 @@ npm install
 - Use git submodules for team rules
 - Version your team rules repository
 - Document team-specific configurations
+
+### Common Issues
+
+**"Model not found" error:**
+```bash
+# Check available models in Cursor chat dropdown
+# Update .cursor/environments/*.json with correct model names
+vim .cursor/environments/development.json
+```
+
+**Rules not applying to files:**
+```bash
+# Check glob patterns in rule files
+grep -r "globs:" .cursor/rules/
+# Make sure patterns match your file structure
+```
+
+**Conflicting with existing linters:**
+```json
+// .cursor/project.json - Add overrides
+{
+  "overrides": {
+    "respectExistingLinting": true,
+    "temperature": 0.05
+  }
+}
+```
+
+**Environment variables not working:**
+```bash
+# Make sure to export the environment
+export CURSOR_ENV=development
+# Or set in your shell profile (.bashrc, .zshrc)
+echo 'export CURSOR_ENV=development' >> ~/.bashrc
+```
 
 ## 📚 Resources
 
