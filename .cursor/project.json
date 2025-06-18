@@ -1,0 +1,15 @@
+{
+  "extends": "../config.json",
+  "overrides": {
+    "model": "openai/gpt-4-turbo",
+    "projectSpecificRules": [
+      "rules/200-api-design.mdc",
+      "rules/300-security-audit.mdc"
+    ],
+    "customCommands": {
+      "test": "python -m pytest --cov=src",
+      "lint": "ruff check . && mypy .",
+      "format": "black . && isort ."
+    }
+  }
+} 

@@ -1,0 +1,70 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+## 🌐 Web API Project Standards
+
+### API Design
+- Follow RESTful principles
+- Use proper HTTP methods (GET, POST, PUT, DELETE, PATCH)
+- Implement consistent URL patterns: `/api/v1/resources/{id}`
+- Use plural nouns for resource endpoints
+- Return appropriate HTTP status codes
+
+### Request/Response Format
+- Use JSON for all request/response bodies
+- Implement consistent pagination format:
+```json
+{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "per_page": 20,
+    "total": 100,
+    "total_pages": 5
+  }
+}
+```
+
+### Error Handling
+- Implement consistent error response format
+- Include error codes for programmatic handling
+- Provide helpful error messages
+- Log errors with request context
+- Return appropriate HTTP status codes
+
+### Authentication & Authorization
+- Use JWT tokens for authentication
+- Implement proper token validation
+- Use middleware for authentication checks
+- Implement role-based access control
+- Rate limit API endpoints
+
+### Validation
+- Validate all input data
+- Use schema validation (JSON Schema, Pydantic, etc.)
+- Return detailed validation errors
+- Sanitize input data before processing
+- Implement request size limits
+
+### Documentation
+- Use OpenAPI/Swagger for API documentation
+- Include request/response examples
+- Document authentication requirements
+- Keep documentation up to date with code changes
+- Provide API client examples
+
+### Testing
+- Write unit tests for all business logic
+- Implement integration tests for API endpoints
+- Test authentication and authorization
+- Test error scenarios and edge cases
+- Use test fixtures for consistent test data
+
+### Performance
+- Implement response caching where appropriate
+- Use database indexing for query optimization
+- Implement request/response compression
+- Monitor API performance and set up alerts
+- Use connection pooling for database connections

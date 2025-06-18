@@ -1,0 +1,167 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+## 🏢 Enterprise Approval Process
+
+### Change Categories
+
+#### Category 1: Minor Changes (Auto-approved)
+- Code formatting and style fixes
+- Documentation updates
+- Test additions without logic changes
+- Dependency version bumps (patch versions)
+
+**Requirements:**
+- Automated tests pass
+- Security scan passes
+- Single reviewer approval
+
+#### Category 2: Standard Changes (Team Lead Approval)
+- Feature additions within existing modules
+- Bug fixes with moderate complexity
+- Configuration changes
+- Minor dependency updates
+
+**Requirements:**
+- Two reviewer approvals (one must be team lead)
+- All automated checks pass
+- Integration tests pass
+- Security review if touching auth/data
+
+#### Category 3: Major Changes (Architecture Review)
+- New service/module creation
+- Database schema changes
+- API contract modifications
+- Third-party integrations
+- Performance-critical code
+
+**Requirements:**
+- Architecture team review
+- Security team review
+- Three reviewer approvals
+- Performance testing results
+- Documentation updates
+
+#### Category 4: Critical Changes (Executive Approval)
+- Security-related modifications
+- Compliance-affecting changes
+- Major dependency updates
+- Infrastructure changes
+- Breaking API changes
+
+**Requirements:**
+- CTO/VP Engineering approval
+- Security officer approval
+- Complete test coverage
+- Rollback plan documented
+- Stakeholder communication plan
+
+### Code Review Standards
+
+#### Reviewer Responsibilities
+- **Functional Review**: Logic correctness and requirements compliance
+- **Security Review**: Vulnerability assessment and security best practices
+- **Performance Review**: Resource usage and scalability considerations
+- **Maintainability Review**: Code clarity and future modification ease
+
+#### Review Checklist
+- [ ] Code follows established patterns and conventions
+- [ ] Adequate test coverage (minimum 80%)
+- [ ] No hard-coded secrets or sensitive data
+- [ ] Error handling is comprehensive
+- [ ] Performance impact is acceptable
+- [ ] Documentation is updated
+- [ ] Breaking changes are documented
+- [ ] Rollback strategy is clear
+
+### Approval Automation
+
+#### Automated Approvals (When Applicable)
+```yaml
+# .github/workflows/auto-approve.yml
+name: Auto Approve Minor Changes
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto-approve:
+    if: |
+      contains(github.event.pull_request.title, '[minor]') ||
+      contains(github.event.pull_request.title, '[docs]') ||
+      contains(github.event.pull_request.title, '[style]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto approve
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              event: 'APPROVE'
+            });
+```
+
+#### Escalation Matrix
+| Issue Type | Initial Contact | Escalation 1 | Escalation 2 |
+|------------|----------------|--------------|--------------|
+| Technical Questions | Team Lead | Senior Architect | CTO |
+| Security Concerns | Security Lead | CISO | Executive Team |
+| Compliance Issues | Compliance Officer | Legal Team | CEO |
+| Performance Issues | Performance Lead | Infrastructure Team | VP Engineering |
+
+### Governance Metrics
+
+#### Approval Time Tracking
+- **Target SLAs:**
+  - Minor changes: 4 hours
+  - Standard changes: 1 business day
+  - Major changes: 3 business days
+  - Critical changes: 1 week
+
+#### Quality Gates
+- All automated tests must pass
+- Security scans must show no high/critical issues
+- Code coverage must not decrease
+- Performance tests must meet benchmarks
+- Documentation must be updated
+
+### Compliance Requirements
+
+#### SOX Compliance (if applicable)
+- All financial system changes require segregation of duties
+- Change logs must be maintained for audit purposes
+- Production changes require additional approval tier
+
+#### GDPR/Privacy Compliance
+- Data processing changes require privacy impact assessment
+- Personal data handling must follow documented procedures
+- Data retention policies must be enforced
+
+#### Industry-Specific Requirements
+- Healthcare (HIPAA): Additional security and audit requirements
+- Financial (PCI DSS): Enhanced security controls
+- Government: Security clearance requirements
+
+### Emergency Procedures
+
+#### Hot Fix Process
+1. **Immediate Response** (0-1 hour)
+   - Security incident or production outage
+   - Single senior engineer approval
+   - Deploy with monitoring
+
+2. **Follow-up Review** (within 24 hours)
+   - Full team review of hot fix
+   - Root cause analysis
+   - Process improvement recommendations
+
+#### Rollback Procedures
+- One-click rollback capability required for all deployments
+- Rollback approval authority defined by change category
+- Communication plan for customer-facing rollbacks

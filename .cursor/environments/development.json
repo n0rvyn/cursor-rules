@@ -1,0 +1,7 @@
+{
+  "model": "openai/gpt-4o",
+  "temperature": 0.1,
+  "contextLines": 300,
+  "enableDebugMode": true,
+  "localLLMEndpoint": "http://localhost:8080/v1"
+} 

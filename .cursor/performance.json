@@ -1,0 +1,17 @@
+{
+  "contextStrategy": "smart",
+  "maxContextSize": 8192,
+  "prioritizeFiles": [
+    "**/*test*.py",
+    "**/*.spec.ts", 
+    "**/README.md"
+  ],
+  "excludePatterns": [
+    "**/node_modules/**",
+    "**/*.log",
+    "**/dist/**",
+    "**/.git/**"
+  ],
+  "cacheEnabled": true,
+  "cacheTimeout": 300
+} 

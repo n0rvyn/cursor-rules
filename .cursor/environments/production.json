@@ -1,0 +1,7 @@
+{
+  "model": "anthropic/claude-3-opus",
+  "temperature": 0.05,
+  "contextLines": 150,
+  "strictMode": true,
+  "requireReview": true
+} 

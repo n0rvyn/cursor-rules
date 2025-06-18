@@ -1,0 +1,48 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+## 🛡️ Security Baseline Requirements
+
+### Secrets Management
+- Never commit secrets to version control
+- Use dedicated secret management tools (HashiCorp Vault, AWS Secrets Manager)
+- Rotate secrets regularly
+- Use different secrets for different environments
+- Audit secret access and usage
+
+### Input Validation
+- Validate all user inputs at the application boundary
+- Use allowlists rather than denylists for validation
+- Sanitize data before processing or storage
+- Implement proper encoding/escaping for outputs
+- Use parameterized queries for database operations
+
+### Authentication & Authorization
+- Implement multi-factor authentication where possible
+- Use secure session management
+- Implement proper password policies
+- Use secure password hashing (bcrypt, scrypt, Argon2)
+- Implement role-based access control (RBAC)
+
+### Data Protection
+- Encrypt sensitive data at rest
+- Use TLS/HTTPS for all data in transit
+- Implement proper data classification
+- Follow data retention policies
+- Ensure secure data disposal
+
+### Dependencies & Libraries
+- Keep all dependencies up to date
+- Regularly scan for known vulnerabilities
+- Use dependency pinning in production
+- Review third-party libraries before adoption
+- Monitor for security advisories
+
+### Logging & Monitoring
+- Log security-relevant events
+- Avoid logging sensitive information
+- Implement centralized logging
+- Set up alerts for suspicious activities
+- Regular security audits and reviews
