@@ -1,0 +1,39 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+## 🔷 TypeScript-Specific Rules
+- Strict mode enabled: `"strict": true` in tsconfig.json
+- No implicit any: all variables must have explicit types
+- Use interfaces for object types, type aliases for unions/intersections
+- Prefer `const assertions` for immutable data
+- Use proper access modifiers: `private`, `protected`, `public`
+
+## Type Definitions
+- Define interfaces for all data structures
+- Use generic types where appropriate: `Array<T>`, `Promise<T>`
+- Prefer `unknown` over `any` when type is uncertain
+- Use type guards for runtime type checking
+
+## Code Organization
+- One export per file for components/classes
+- Use barrel exports (index.ts) for modules
+- Separate types into dedicated `.types.ts` files
+- Use proper import/export syntax
+
+## React/TSX Specific (if applicable)
+- Use functional components with hooks
+- Define component props with interfaces
+- Use `React.FC<Props>` or explicit return types
+- Handle events with proper TypeScript event types
+
+## Error Handling
+- Use discriminated unions for error states
+- Prefer Result/Either patterns over throwing exceptions
+- Type your catch blocks: `catch (error: unknown)`
+
+## Testing
+- Use Jest with TypeScript configuration
+- Type your test fixtures and mocks
+- Use `@testing-library` for React component testing

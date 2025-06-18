@@ -1,0 +1,43 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+## 🔌 API Design Standards
+- Follow RESTful conventions for HTTP endpoints
+- Use consistent naming: plural nouns for resources (`/users`, `/orders`)
+- Implement proper HTTP status codes (200, 201, 400, 401, 404, 500)
+- Include request/response validation
+- Version APIs properly: `/api/v1/`, `/api/v2/`
+
+## Request/Response Format
+- Use JSON for request/response bodies
+- Implement consistent error response format:
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid request data",
+    "details": ["field 'email' is required"]
+  }
+}
+```
+
+## Authentication & Security
+- Implement proper authentication (JWT, OAuth2)
+- Use HTTPS for all endpoints
+- Validate and sanitize all inputs
+- Implement rate limiting
+- Add CORS headers when needed
+
+## Documentation
+- Document all endpoints with OpenAPI/Swagger
+- Include request/response examples
+- Document authentication requirements
+- Provide error code explanations
+
+## Performance
+- Implement pagination for list endpoints
+- Use appropriate caching headers
+- Compress responses when beneficial
+- Monitor API performance and set SLA targets

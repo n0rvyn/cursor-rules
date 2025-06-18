@@ -1,0 +1,49 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+## 🔒 Security Audit Standards
+- Never commit secrets, API keys, or passwords to version control
+- Use environment variables for sensitive configuration
+- Implement proper input validation and sanitization
+- Use parameterized queries to prevent SQL injection
+- Validate file uploads and restrict file types
+
+## Authentication & Authorization
+- Implement strong password policies
+- Use secure session management
+- Implement proper role-based access control (RBAC)
+- Log authentication attempts and failures
+- Implement account lockout after failed attempts
+
+## Data Protection
+- Encrypt sensitive data at rest and in transit
+- Use HTTPS/TLS for all communications
+- Implement proper data retention policies
+- Follow privacy regulations (GDPR, CCPA)
+- Sanitize data in logs and error messages
+
+## Code Security
+- Keep dependencies up to date
+- Run security scans on dependencies
+- Implement Content Security Policy (CSP) for web apps
+- Use secure coding practices to prevent XSS, CSRF
+- Validate and escape all user inputs
+
+## Monitoring & Logging
+- Log security events and access attempts
+- Monitor for suspicious activities
+- Implement intrusion detection
+- Set up alerts for security incidents
+- Regular security assessments and penetration testing
+
+## Compliance Checklist
+- [ ] No hardcoded secrets in code
+- [ ] All inputs validated and sanitized
+- [ ] HTTPS enforced for all endpoints
+- [ ] Authentication properly implemented
+- [ ] Authorization checks in place
+- [ ] Security headers configured
+- [ ] Dependencies scanned for vulnerabilities
+- [ ] Logging and monitoring active

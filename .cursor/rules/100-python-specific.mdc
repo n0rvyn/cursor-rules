@@ -1,0 +1,54 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+## 🐍 Python-Specific Rules
+- Mandatory type annotations: `def func(param: str) -> int:`
+- Use dataclasses instead of regular classes
+- Prefer async/await for asynchronous functions
+- Import order: standard library → third-party → local modules
+- Docstrings must follow Google Style
+
+## Type Hints
+- All function parameters and return types must have type hints
+- Use `typing` module for complex types: `List[str]`, `Dict[str, int]`, `Optional[str]`
+- For Python 3.9+, prefer built-in types: `list[str]`, `dict[str, int]`
+
+## Code Organization
+- Use `dataclasses` for data structures
+- Prefer `pathlib.Path` over `os.path`
+- Use context managers (`with` statements) for resource management
+- Exception handling: catch specific exceptions, not bare `except:`
+
+## Async Programming
+- Use `async def` for asynchronous functions
+- Prefer `asyncio.create_task()` over `asyncio.ensure_future()`
+- Use `async with` for async context managers
+- Always await coroutines
+
+## Documentation
+- All public functions must have docstrings
+- Use Google Style docstrings:
+```python
+def example_function(param1: str, param2: int) -> bool:
+    """Brief description of the function.
+    
+    Args:
+        param1: Description of param1.
+        param2: Description of param2.
+        
+    Returns:
+        Description of return value.
+        
+    Raises:
+        ValueError: When param1 is empty.
+    """
+    pass
+```
+
+## Testing
+- Use `pytest` for testing
+- Test files should be named `test_*.py` or `*_test.py`
+- Use descriptive test function names: `test_should_return_true_when_valid_input()`
+- Use fixtures for common test setup
