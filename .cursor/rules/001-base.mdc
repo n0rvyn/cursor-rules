@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Global coding conventions & context order
+alwaysApply: true
+globs:
+  - "**/*.{py,ts,tsx,js,go,java,kt,rs,cpp,cs}"
+---
+
+## 📐 Coding Style
+- Python follows PEP 8, TS/JS follows Airbnb style guide
+- Functions use `snake_case`, classes use `PascalCase`
+- Never swallow exceptions: explicitly raise/return errors
+
+## 📚 Context Precedence
+1. Rule files (lower numbers have higher priority)
+2. Existing source code
+3. Chat prompts
+
+> Never invent APIs out of thin air; ask for clarification when information is missing.

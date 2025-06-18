@@ -1,0 +1,34 @@
+{
+  // 1. Preferred model (can be temporarily overridden by prompt)
+  "model": "openai/gpt-4o",
+
+  // 2. Temperature: lower is more stable (0 ~ 1)
+  "temperature": 0.2,
+
+  // 3. Context lines to extract
+  "contextLines": 250,
+
+  // 4. Max files per injection (prevent large repo overload)
+  "maxFiles": 20,
+
+  // 5. Max token budget per single call
+  "tokenBudget": 4096,
+
+  // 6. Draft mode: output diff only instead of complete file
+  "draftMode": "diff",
+
+  // 7. Auto commit toggle
+  "autoCommit": false,
+
+  // 8. Multi-model voting (auto-used when `compare` command enabled)
+  "multiModelComparison": [
+    "openai/gpt-4o",
+    "anthropic/claude-3-opus"
+  ],
+
+  // 9. Auto lint on save
+  "lintOnSave": true,
+
+  // 10. Local test command
+  "runTests": "pytest"
+} 

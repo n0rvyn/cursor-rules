@@ -1,0 +1,20 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+---
+description: Ten strict guardrails to minimize hallucination
+alwaysApply: true
+---
+
+1. **Compile gate** — Auto-execute build/compile after changes; abort on failure
+2. **Static analysis pass** — Run Linter/Formatter, block errors
+3. **Strict type check** — `mypy` / `tsc --noEmit` must have zero errors
+4. **Reference existing APIs** — Grep entire codebase first, then introduce new APIs
+5. **Limit diff size** — Single modification ≤ 120 effective lines
+6. **Ask-before-invent** — When APIs are missing, ask first to confirm specs
+7. **Red-green testing** — Write failing tests first, then implement
+8. **Self-critique footer** — Add `SELF-CHECK:` at output end summarizing potential risks
+9. **Cross-model vote** — If comparison enabled, prioritize consensus answers
+10. **Token sanity snapshot** — Summarize context every 800 tokens to prevent drift

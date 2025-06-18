@@ -1,0 +1,34 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Keep DEV_CHECKLIST.md up-to-date
+alwaysApply: true
+---
+
+## ✨ Checklist Workflow
+1. **After analyzing prompts**  
+   - If no `DEV_CHECKLIST.md` exists in root, create it immediately with proper title
+   - Break down requirements into tasks: `- [ ] <verb + task>`
+
+2. **Every time code is modified**  
+   - Mark completed tasks as `- [x]` + "✅ YYYY-MM-DD"
+   - Add new TODOs as new unchecked items
+
+3. **Section ordering**
+
+```
+### Features
+
+### Refactors
+
+### Tests
+
+### Documentation
+
+### Chores
+```
+
+4. **Historical record**: Never delete completed tasks.
