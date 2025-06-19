@@ -1,8 +1,17 @@
 ---
-description:
-globs:
+description: 
+globs: 
 alwaysApply: false
 ---
+---
+description: Python-specific conventions and patterns
+scopes: [chat, edit]
+tags: [python, language-specific]
+priority: 100
+globs:
+  - "**/*.py"
+---
+
 ## 🐍 Python-Specific Rules
 - Mandatory type annotations: `def func(param: str) -> int:`
 - Use dataclasses instead of regular classes

@@ -1,8 +1,17 @@
 ---
-description:
-globs:
+description: 
+globs: 
 alwaysApply: false
 ---
+---
+description: TypeScript/JavaScript patterns and conventions
+scopes: [chat, edit]
+tags: [typescript, javascript, language-specific]
+priority: 110
+globs:
+  - "**/*.{ts,tsx,js,jsx}"
+---
+
 ## 🔷 TypeScript-Specific Rules
 - Strict mode enabled: `"strict": true` in tsconfig.json
 - No implicit any: all variables must have explicit types

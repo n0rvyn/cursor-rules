@@ -1,10 +1,13 @@
 ---
-description:
-globs:
+description: 
+globs: 
 alwaysApply: false
 ---
 ---
 description: Write failing tests first, then code until green
+scopes: [chat, edit]
+tags: [testing, tdd]
+priority: 30
 alwaysApply: true
 globs:
   - "**/*.{py,ts,tsx,js,go}"

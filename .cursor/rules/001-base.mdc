@@ -1,13 +1,7 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Global coding conventions & context order
+globs: 
 alwaysApply: true
-globs:
-  - "**/*.{py,ts,tsx,js,go,java,kt,rs,cpp,cs}"
 ---
 
 ## 📐 Coding Style

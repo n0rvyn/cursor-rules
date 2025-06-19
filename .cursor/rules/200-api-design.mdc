@@ -3,6 +3,15 @@ description:
 globs: 
 alwaysApply: false
 ---
+---
+description: RESTful API design principles and patterns
+scopes: [chat, edit]
+tags: [api, design-patterns]
+priority: 200
+globs:
+  - "**/*.{py,ts,js,go}"
+---
+
 ## 🔌 API Design Standards
 - Follow RESTful conventions for HTTP endpoints
 - Use consistent naming: plural nouns for resources (`/users`, `/orders`)
