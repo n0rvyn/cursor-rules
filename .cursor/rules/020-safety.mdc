@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Hallucination guardrails & file-by-file editing
 scopes: [chat, edit]
 tags: [safety, guardrails]

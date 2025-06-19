@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Ten strict guardrails to minimize hallucination
 scopes: [chat, edit]
 tags: [anti-hallucination, quality]

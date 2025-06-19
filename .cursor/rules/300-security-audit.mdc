@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Security audit checklist and secure coding practices
 scopes: [chat, edit]
 tags: [security, audit]

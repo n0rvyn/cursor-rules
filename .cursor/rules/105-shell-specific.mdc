@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Shell/Bash scripting conventions and best practices
 scopes: [chat, edit]
 tags: [shell, bash, scripting, language-specific]

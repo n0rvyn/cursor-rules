@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: RESTful API design principles and patterns
 scopes: [chat, edit]
 tags: [api, design-patterns]

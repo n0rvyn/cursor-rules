@@ -1,9 +1,4 @@
 ---
-description: 
-globs: 
-alwaysApply: false
----
----
 description: Write failing tests first, then code until green
 scopes: [chat, edit]
 tags: [testing, tdd]
