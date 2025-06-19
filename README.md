@@ -5,6 +5,14 @@
 > 
 > **中文**: 用于专业开发工作流的全面 Cursor AI 配置包
 
+## 🆕 New Features
+
+- ✅ **YAML Linting** - GitHub Actions automatically validate rule syntax
+- ✅ **Scopes & Tags** - Modern Cursor features for selective rule enabling  
+- ✅ **Shell Support** - Dedicated Bash/Shell scripting rules (105-shell-specific.mdc)
+- ✅ **FAQ & Examples** - Comprehensive documentation and `.cursorignore` examples
+- ✅ **Enhanced Priority System** - Clear rule precedence with priority fields
+
 ## 🚀 Quick Start
 
 ### 1. Copy Configuration
@@ -23,6 +31,33 @@ cp examples/sample-requirements.txt your-project/requirements.txt  # Python
 
 ### 3. Verify Setup
 Test with a simple prompt: `@filename refactor this function`
+
+### 4. Visual Demo - See Rules in Action
+**Before (without rules):**
+```python
+def process_data(data):
+    result = []
+    for item in data:
+        if item:
+            result.append(item * 2)
+    return result
+```
+
+**After (with Python rules applied):**
+```python
+def process_data(data: list[int]) -> list[int]:
+    """Process data by doubling non-zero values.
+    
+    Args:
+        data: List of integers to process.
+        
+    Returns:
+        List of doubled non-zero values.
+    """
+    return [item * 2 for item in data if item]
+```
+
+*✨ Auto-applied: type hints, docstring, list comprehension, better style*
 
 **Quick Health Check:**
 ```bash
@@ -48,6 +83,7 @@ head -5 .cursor/rules/*.mdc | grep "---"  # Should show YAML front matter
 │   │   ├── 030-test-driven.mdc # TDD patterns
 │   │   ├── 050-anti-hallucination.mdc # Advanced protection
 │   │   ├── 100-python.mdc     # Python-specific rules
+│   │   ├── 105-shell-specific.mdc # Shell/Bash scripting rules
 │   │   ├── 110-typescript.mdc # TypeScript-specific rules
 │   │   ├── 200-api-design.mdc # API development
 │   │   └── 300-security.mdc   # Security best practices
@@ -55,8 +91,11 @@ head -5 .cursor/rules/*.mdc | grep "---"  # Should show YAML front matter
 │   ├── performance.json       # Performance optimization
 │   └── project.json          # Project overrides
 ├── examples/                  # Template configurations
+│   └── .cursorignore          # Sample ignore patterns
 ├── team-rules-examples/       # Team collaboration templates
-└── scripts/                   # Automation tools
+├── scripts/                   # Automation tools
+├── FAQ.md                     # Common questions & troubleshooting
+└── .github/workflows/         # CI/CD for rule validation
 ```
 
 ## ⚙️ Configuration Details
@@ -69,9 +108,17 @@ head -5 .cursor/rules/*.mdc | grep "---"  # Should show YAML front matter
 
 ### Language-Specific Rules (Optional)
 - **100-python.mdc**: Type hints, async/await, pytest patterns
+- **105-shell-specific.mdc**: Shell/Bash scripting best practices, error handling
 - **110-typescript.mdc**: Strict typing, React patterns, Jest testing
 - **200-api-design.mdc**: RESTful conventions, OpenAPI documentation
 - **300-security.mdc**: Security best practices and compliance
+
+### Modern Rule Features
+All rules now include:
+- **Scopes**: `[chat, edit]` - Control when rules apply
+- **Tags**: Categorization for selective enabling
+- **Priority**: Clear precedence ordering (1-300)
+- **Globs**: File pattern matching
 
 ### Environment Configurations
 
@@ -186,6 +233,27 @@ git submodule add https://github.com/yourorg/team-cursor-rules .cursor/team
 
 # Reference in project config
 echo '{"extends": ["./config.json", "team/shared/standards.mdc"]}' > .cursor/project.json
+```
+
+## ❓ Troubleshooting
+
+Having issues? Check our comprehensive [FAQ.md](./FAQ.md) for:
+- Rule precedence and conflicts
+- YAML syntax errors  
+- File pattern matching
+- Performance optimization
+- Common setup problems
+
+**Quick fixes:**
+```bash
+# Validate rule syntax
+.github/workflows/lint.yml  # Run this locally
+
+# Check rule loading order
+find .cursor/rules -name "*.mdc" | sort
+
+# Reset configuration
+cp -r .cursor.backup .cursor  # If you made a backup
 ```
 
 ## 🛠️ Language-Specific Setup
