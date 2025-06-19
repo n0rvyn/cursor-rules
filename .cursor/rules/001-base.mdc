@@ -7,9 +7,9 @@ alwaysApply: false
 description: Global coding conventions & context order
 globs: 
 alwaysApply: true
-
 ---
-## 📐 Coding Style
+
+## 📐 Coding Style  
     - Python follows PEP 8, TS/JS follows Airbnb style guide
     - Functions use `snake_case`, classes use `PascalCase`
     - Never swallow exceptions: explicitly raise/return errors
