@@ -1,8 +1,15 @@
 ---
+description:
+globs:
+alwaysApply: false
+---
+---
 description: Security audit checklist and secure coding practices
 scopes: [chat, edit]
 tags: [security, audit]
 priority: 300
+---
+
 ## 🔒 Security Audit Standards
 - Never commit secrets, API keys, or passwords to version control
 - Use environment variables for sensitive configuration

@@ -1,8 +1,15 @@
 ---
+description:
+globs:
+alwaysApply: false
+---
+---
 description: Python-specific conventions and patterns
 scopes: [chat, edit]
 tags: [python, language-specific]
 priority: 100
+---
+
 ## 🎯 Template-First Development
 - **Service Classes**: Use @templates/python-service.py as starting point for new services
 - **Async Patterns**: Follow the BaseService pattern for consistent error handling

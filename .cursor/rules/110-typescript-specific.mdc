@@ -1,13 +1,15 @@
 ---
 description: TypeScript/JavaScript patterns and conventions
-scopes: [chat, edit]
-tags: [typescript, javascript, language-specific]
-priority: 110
+globs:
+alwaysApply: false
+---
 ---
 description: TypeScript/JavaScript patterns and conventions
 scopes: [chat, edit]
 tags: [typescript, javascript, language-specific]
 priority: 110
+---
+
 ## 🎯 Template-First Development
 - **React Components**: Use @templates/react-component.tsx for new UI components
 - **Express Services**: Use @templates/express-service.ts for API endpoints

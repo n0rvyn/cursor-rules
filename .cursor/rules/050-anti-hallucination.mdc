@@ -1,13 +1,15 @@
 ---
 description: Ten strict guardrails to minimize hallucination
-scopes: [chat, edit]
-tags: [anti-hallucination, quality]
-priority: 50
+globs:
+alwaysApply: false
+---
 ---
 description: Ten strict guardrails to minimize hallucination
 scopes: [chat, edit]
 tags: [anti-hallucination, quality]
 priority: 50
+---
+
 ## 🛡️ Core Anti-Hallucination Measures
 - **Verify Information**: Always cross-check against provided context before coding
 - **File-by-File Changes**: Complete one file before moving to next, ask for review
