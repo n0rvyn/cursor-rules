@@ -30,16 +30,11 @@ cp -r cursor-team-rules/rules/* .cursor/rules/
 ```
 
 ### 3. Project Configuration
-```json
-// .cursor/project.json
-{
-  "extends": ["./config.json", "team/shared/security-baseline.mdc"],
-  "teamRules": {
-    "language": "typescript", // or "python", "go", etc.
-    "projectType": "web-api", // or "frontend", "cli", etc.
-    "strictMode": true
-  }
-}
+```bash
+# Team rules are automatically loaded from .cursor/rules/
+# Simply ensure team rules are present in the rules directory
+ln -s .cursor/team/shared/* .cursor/rules/
+ln -s .cursor/team/languages/typescript/* .cursor/rules/
 ```
 
 ## 📁 Team Rules Structure
@@ -139,17 +134,18 @@ priority: 900
 EOF
 ```
 
-### Environment-Specific Overrides
-```json
-// .cursor/environments/staging.json
-{
-  "extends": "../config.json",
-  "overrides": {
-    "strictMode": false,
-    "allowExperimentalFeatures": true,
-    "debugLevel": "verbose"
-  }
-}
+### Context-Specific Rules
+```mdc
+---
+description: Staging environment specific rules
+priority: 950
+globs: ["staging/**/*", "**/*.staging.*"]
+---
+
+# Staging Environment Rules
+- Allow experimental features for testing
+- Use verbose logging for debugging
+- Less strict validation for rapid iteration
 ```
 
 ## 📊 Team Adoption Metrics
@@ -184,4 +180,4 @@ Track team adoption success:
 
 ---
 
-> **Key Principle**: Team rules should enhance productivity, not create bureaucracy. Focus on rules that directly improve AI assistance quality. 
+> **Key Principle**: Team rules should enhance productivity, not create bureaucracy. Focus on rules that directly improve AI assistance quality.

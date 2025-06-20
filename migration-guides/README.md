@@ -13,11 +13,11 @@ git add -A && git commit -m "Backup before Cursor integration"
 cp -r path/to/98-Cursor/.cursor ./
 ```
 
-### 2. Update Models
+### 2. Configure Rules
 ```bash
-# Edit to use your available models
-vim .cursor/environments/development.json  # Change "model" field
-vim .cursor/environments/production.json   # Change "model" field
+# Rules are automatically loaded from .cursor/rules/
+# Models are configured through Cursor Settings > Models
+# No additional configuration files needed
 ```
 
 ### 3. Test & Validate
@@ -33,14 +33,16 @@ vim .cursor/environments/production.json   # Change "model" field
 
 ### Existing Linters/Formatters
 **Keep your existing tools**, Cursor rules work alongside them:
-```json
-// .cursor/project.json - Override if needed
-{
-  "overrides": {
-    "respectExistingLinting": true,
-    "temperature": 0.05  // More conservative with existing standards
-  }
-}
+```mdc
+---
+description: Project-specific overrides for existing standards
+priority: 900
+---
+
+# Existing Standards Integration
+- Respect existing linting configurations
+- Follow current code formatting rules
+- Use conservative AI suggestions when existing tools are present
 ```
 
 ### Existing Code Standards
@@ -87,14 +89,14 @@ cp .cursor/rules/020-safety.mdc .cursor/rules/
 ## 🔍 Troubleshooting
 
 **Rules not working?**
-1. Check model name in environment files
-2. Restart Cursor: Ctrl+Shift+P → "Cursor: Reload Rules"
-3. Validate: `find .cursor -name "*.json" -exec echo "Checking {}" \; -exec cat {} \;`
+1. Check rule file syntax: `find .cursor/rules -name "*.mdc"`
+2. Restart Cursor: Cmd+Shift+P → "Cursor: Reload Rules"
+3. Verify in Cursor Settings > Rules > Project Rules
 
 **AI suggestions conflict with existing code?**
-1. Lower temperature: `"temperature": 0.05`
-2. Add project-specific rules to override
-3. Use environment variables for different contexts
+1. Add project-specific rules with higher priority numbers
+2. Use more specific glob patterns in rule files
+3. Create custom rules that reference your existing standards
 
 **Team resistance?**
 1. Start with just basic rules
@@ -103,4 +105,4 @@ cp .cursor/rules/020-safety.mdc .cursor/rules/
 
 ---
 
-> **Key Point**: Don't overthink it. Copy the configs, update the model names, test it works. You can customize later based on actual usage. 
+> **Key Point**: Don't overthink it. Copy the configs, update the model names, test it works. You can customize later based on actual usage.

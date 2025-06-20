@@ -3,45 +3,55 @@ description: RESTful API design principles and patterns
 scopes: [chat, edit]
 tags: [api, design-patterns]
 priority: 200
-globs:
-  - "**/*.{py,ts,js,go}"
----
+## 🎯 Template-First Approach
+- **Express Services**: Use skeleton from @templates/express-service.ts for new API endpoints
+- **Python Services**: Use pattern from @templates/python-service.py for async service classes
+- **React Components**: Follow @templates/react-component.tsx for UI components
 
-## 🔌 API Design Standards
-- Follow RESTful conventions for HTTP endpoints
-- Use consistent naming: plural nouns for resources (`/users`, `/orders`)
-- Implement proper HTTP status codes (200, 201, 400, 401, 404, 500)
-- Include request/response validation
-- Version APIs properly: `/api/v1/`, `/api/v2/`
+## 📡 RESTful Conventions
+- Use HTTP verbs correctly: GET (read), POST (create), PUT (update), DELETE (remove)
+- Resource URLs: `/api/users/{id}` not `/api/getUser?id=123`
+- Return consistent JSON structure: `{success: boolean, data?: any, error?: string}`
+- Use proper HTTP status codes: 200, 201, 400, 401, 403, 404, 500
 
-## Request/Response Format
-- Use JSON for request/response bodies
-- Implement consistent error response format:
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Invalid request data",
-    "details": ["field 'email' is required"]
-  }
-}
-```
+## 🔐 Security Standards
+- Always validate input parameters using middleware (express-validator, Joi, etc.)
+- Implement rate limiting on all public endpoints
+- Use HTTPS in production, include security headers
+- Never expose internal error details to clients
 
-## Authentication & Security
-- Implement proper authentication (JWT, OAuth2)
-- Use HTTPS for all endpoints
-- Validate and sanitize all inputs
-- Implement rate limiting
-- Add CORS headers when needed
+## 📝 Documentation Requirements
+- Include OpenAPI/Swagger documentation for all endpoints
+- Document request/response schemas with examples
+- Maintain API versioning strategy: `/api/v1/`, `/api/v2/`
+- Keep CHANGELOG.md updated for API changes
 
-## Documentation
-- Document all endpoints with OpenAPI/Swagger
-- Include request/response examples
-- Document authentication requirements
-- Provide error code explanations
+## 🚨 DEV ONLY - Development Environment
+*These rules apply only during development*
+- Enable detailed error logging with stack traces
+- Allow CORS from localhost origins
+- Include debug endpoints for testing
+- Use development database with seed data
 
-## Performance
-- Implement pagination for list endpoints
-- Use appropriate caching headers
+## 🔒 PROD ONLY - Production Environment
+*These rules apply only in production*
+- Disable debug endpoints and verbose logging
+- Implement strict CORS policies
+- Use environment variables for all configuration
+- Enable request logging and monitoring
+- Implement circuit breaker patterns for external services
+
+## 🎛️ Error Handling
+- Use custom error classes with proper inheritance
+- Log errors with context (user ID, request ID, timestamp)
+- Return user-friendly error messages
+- Implement retry logic for transient failures
+
+## 📊 Performance Optimization
+- Implement response caching where appropriate
+- Use database indexing for frequently queried fields
+- Implement pagination for list endpoints (limit/offset or cursor-based)
+- Monitor response times and set SLA targets
+
 - Compress responses when beneficial
 - Monitor API performance and set SLA targets
