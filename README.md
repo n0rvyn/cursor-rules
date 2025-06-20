@@ -1,12 +1,14 @@
 # Cursor Advanced Configuration Guide
 
+[![Install](https://img.shields.io/badge/Install%20Rules-run%20script-blue)](https://raw.githubusercontent.com/n0rvyn/cursor-rules/main/install-cursor-rules.sh)
+
 > A comprehensive Cursor AI configuration package for professional development workflows
 
 ## 🆕 New Features
 
 - ✅ **YAML Linting** - GitHub Actions automatically validate rule syntax
 - ✅ **Scopes & Tags** - Modern Cursor features for selective rule enabling
-- ✅ **Shell Support** - Dedicated Bash/Shell scripting rules (105-shell-specific.mdc)
+- ✅ **Shell Support** - Dedicated Bash/Shell scripting rules (105-bash-conventions.mdc)
 - ✅ **FAQ & Examples** - Comprehensive documentation and `.cursorignore` examples
 - ✅ **Enhanced Priority System** - Clear rule precedence with priority fields
 
@@ -66,11 +68,15 @@ cp -r .cursor your-project/
 │   │   ├── 030-test-driven.mdc # TDD patterns
 │   │   ├── 050-anti-hallucination.mdc # AI protection strategies
 │   │   ├── 060-token-efficiency.mdc # Performance optimization
+│   │   ├── 090-env-schema.mdc # Env var documentation
 │   │   ├── 100-python-specific.mdc # Python templates & patterns
-│   │   ├── 105-shell-specific.mdc # Shell/Bash best practices
+│   │   ├── 105-bash-conventions.mdc # Shell/Bash best practices
 │   │   ├── 110-typescript-specific.mdc # TypeScript/React patterns
 │   │   ├── 200-api-design.mdc  # API development standards
 │   │   └── 300-security-audit.mdc # Security & compliance
+│   │   ├── 210-bugbot-autofix.mdc # BugBot PR replies
+│   │   ├── 310-commit-msg.mdc  # Conventional commits helper
+│   │   └── 400-reactive-storage.mdc # React state patterns
 │   └── team-rules-examples/    # Team collaboration templates
 │       ├── enterprise/
 │       │   └── governance/
@@ -99,13 +105,18 @@ cp -r .cursor your-project/
 - **010-checklist.mdc**: Automatic task list maintenance
 - **020-safety.mdc**: Basic error prevention
 - **050-anti-hallucination.mdc**: Advanced AI protection strategies
+- **060-token-efficiency.mdc**: Performance optimization
+- **090-env-schema.mdc**: Document environment variable names only
 
 ### Language-Specific Rules (Optional)
 - **100-python.mdc**: Type hints, async/await, pytest patterns
-- **105-shell-specific.mdc**: Shell/Bash scripting best practices, error handling
+- **105-bash-conventions.mdc**: Shell/Bash scripting best practices, error handling
 - **110-typescript.mdc**: Strict typing, React patterns, Jest testing
 - **200-api-design.mdc**: RESTful conventions, OpenAPI documentation
-- **300-security.mdc**: Security best practices and compliance
+- **210-bugbot-autofix.mdc**: Respond to BugBot PR comments
+- **300-security-audit.mdc**: Comprehensive security standards, best practices, compliance checklists
+- **310-commit-msg.mdc**: Conventional Commit helper
+- **400-reactive-storage.mdc**: React state and context patterns
 
 ### Modern Rule Features
 All rules now include:
@@ -181,7 +192,7 @@ alwaysApply: true                   # Always vs conditional activation
 
 ### Language-Specific Rules (100-199)
 - **100-python-specific.mdc**: Template-first development, type hints, async patterns, testing conventions
-- **105-shell-specific.mdc**: Bash best practices, error handling, security considerations, shellcheck compliance
+- **105-bash-conventions.mdc**: Bash best practices, error handling, security considerations, shellcheck compliance
 - **110-typescript-specific.mdc**: Template-driven React/Express patterns, strict TypeScript, modern frameworks
 
 ### Domain-Specific Rules (200-399)

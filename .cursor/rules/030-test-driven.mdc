@@ -1,5 +1,6 @@
+<!-- Priority: HIGH -->
 ---
-description: Write failing tests first, then code until green
+description: 030-test-driven – Write failing tests first, then code until green
 scopes: [chat, edit]
 tags: [testing, tdd]
 priority: 30

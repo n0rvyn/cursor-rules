@@ -1,0 +1,14 @@
+<!-- Priority: HIGH -->
+---
+description: 090-env-schema – Document environment variable names only
+scopes: [chat]
+tags: [env, secrets]
+priority: 90
+alwaysApply: false
+---
+
+## 🗝️ Environment Variable Guidelines
+- List **only** the names of required environment variables.
+- Never request or output the secret values.
+- Reference `.env.example` or documentation for expected formats.
+- When prompted for missing configuration, direct developers to the secure vault.

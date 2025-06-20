@@ -1,10 +1,6 @@
+<!-- Priority: MEDIUM -->
 ---
-description: TypeScript/JavaScript patterns and conventions
-globs:
-alwaysApply: false
----
----
-description: TypeScript/JavaScript patterns and conventions
+description: 110-typescript-specific – TypeScript/JavaScript patterns and conventions
 scopes: [chat, edit]
 tags: [typescript, javascript, language-specific]
 priority: 110

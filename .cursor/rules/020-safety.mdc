@@ -1,5 +1,6 @@
+<!-- Priority: HIGH -->
 ---
-description: Hallucination guardrails & file-by-file editing
+description: 020-safety – Hallucination guardrails & file-by-file editing
 scopes: [chat, edit]
 tags: [safety, guardrails]
 priority: 20

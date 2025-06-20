@@ -1,0 +1,13 @@
+<!-- Priority: LOW -->
+---
+description: 310-commit-msg – Generate Conventional Commit messages
+scopes: [chat]
+tags: [git, workflow]
+priority: 310
+alwaysApply: false
+---
+
+## 📝 Commit Message Guidelines
+- Use **Conventional Commits** format: `type(scope): subject`.
+- Include a short changelog entry summarizing the change.
+- If multiple files change, mention key highlights.

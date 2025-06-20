@@ -1,0 +1,14 @@
+<!-- Priority: LOW -->
+---
+description: 210-bugbot-autofix – Respond to BugBot PR comments
+scopes: [chat]
+tags: [bugbot, automation]
+priority: 210
+alwaysApply: false
+---
+
+## 🤖 BugBot Auto-Fix Template
+When BugBot leaves a comment on a PR:
+1. Summarize the reported issue in a sentence.
+2. Provide a diff snippet that resolves it.
+3. Mention the affected files and any follow-up steps.

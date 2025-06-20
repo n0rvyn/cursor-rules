@@ -1,10 +1,6 @@
+<!-- Priority: LOW -->
 ---
-description:
-globs:
-alwaysApply: false
----
----
-description: RESTful API design principles and patterns
+description: 200-api-design – RESTful API design principles and patterns
 scopes: [chat, edit]
 tags: [api, design-patterns]
 priority: 200

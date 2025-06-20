@@ -1,5 +1,9 @@
+<!-- Priority: MEDIUM -->
 ---
-description:
+description: 060-token-efficiency – Token conservation techniques
+scopes: [chat, edit]
+tags: [efficiency, tokens]
+priority: 60
 globs:
 alwaysApply: false
 ---

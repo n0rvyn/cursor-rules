@@ -1,0 +1,14 @@
+<!-- Priority: LOW -->
+---
+description: 400-reactive-storage – React context and hook patterns
+scopes: [chat, edit]
+tags: [react, state]
+priority: 400
+alwaysApply: false
+---
+
+## ⚛️ Reactive Storage Guidelines
+- Use React context for global state, wrapped with custom hooks.
+- Avoid prop drilling by providing `useX` hooks.
+- Keep state serializable to support time-travel debugging.
+- Reference existing patterns before introducing new ones.

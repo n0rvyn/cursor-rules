@@ -1,10 +1,9 @@
+<!-- Priority: HIGH -->
 ---
-description:
-globs:
-alwaysApply: false
----
----
-description: Global coding conventions & context order
+description: 001-base – Global coding conventions & context order
+scopes: [chat, edit]
+tags: [base, conventions]
+priority: 1
 globs: ["**/*.py", "**/*.ts"]
 alwaysApply: true
 ---

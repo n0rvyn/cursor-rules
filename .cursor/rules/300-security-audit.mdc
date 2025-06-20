@@ -1,10 +1,6 @@
+<!-- Priority: LOW -->
 ---
-description:
-globs:
-alwaysApply: false
----
----
-description: Security audit checklist and secure coding practices
+description: 300-security-audit – Security audit checklist and secure coding practices
 scopes: [chat, edit]
 tags: [security, audit]
 priority: 300
