@@ -11,7 +11,7 @@ Cursor loads rules in this order:
 Example:
 - `001-base.mdc` (priority: 1) loads first
 - `050-anti-hallucination.mdc` (priority: 50) can override base rules
-- `300-security-audit.mdc` (priority: 300) has highest precedence
+- `310-security-audit.mdc` (priority: 310) has highest precedence
 
 ### What are `scopes` and how do I use them?
 Scopes control when rules are applied:

@@ -4,10 +4,10 @@ globs:
 alwaysApply: false
 ---
 ---
-description: RESTful API design principles and patterns
+description: "210: RESTful API design principles and patterns"
 scopes: [chat, edit]
 tags: [api, design-patterns]
-priority: 200
+priority: 210
 ---
 
 ## 🎯 Template-First Approach
