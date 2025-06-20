@@ -11,7 +11,7 @@ priority: 50
 - **File-by-File Changes**: Complete one file before moving to next, ask for review
 - **Single Chunk Edits**: Provide all file edits in one block to avoid fragmentation
 - **Explicit Confirmation**: Ask before major architectural changes
-- **Reference Existing Patterns**: Check @src/patterns/ before creating new approaches
+- **Reference Existing Patterns**: Check @templates/express-service.ts before creating new approaches
 
 ## 🔍 Quality Gates
 - **Limit Change Size**: Single modification ≤ 120 effective lines

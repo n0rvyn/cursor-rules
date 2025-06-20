@@ -8,13 +8,13 @@ globs:
 alwaysApply: false
 ---
 ## 💰 Token Conservation
-- **Template References**: Use `@templates/pattern.ts` instead of explaining patterns
+- **Template References**: Use `@templates/express-service.ts` instead of explaining patterns
 - **Diff-Only Responses**: Output code changes, minimize explanatory text
-- **Pattern Libraries**: Reference existing `@src/patterns/` rather than recreating
+- **Pattern Libraries**: Reference existing `@templates/react-component.tsx` rather than recreating
 - **Concise Comments**: Write brief, focused inline documentation
 
 ## ⚡ Performance Optimization
-- **Targeted Context**: Use `@specific/file.ts` rather than broad directory references
+- **Targeted Context**: Use `@templates/python-service.py` rather than broad directory references
 - **Selective Max Mode**: Only enable for cross-file refactoring (not single-file edits)
 - **Smart File Selection**: Reference only files directly relevant to current task
 - **Batch Related Changes**: Group similar modifications in single session

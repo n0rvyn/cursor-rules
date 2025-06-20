@@ -74,6 +74,8 @@ jobs:
       - name: Check @references
         run: |
           echo "🔍 Checking referenced files exist..."
-          grep -R --no-line-number '@' .cursor/rules/*.mdc | sed 's/.*@//' | while read path; do
-            [ -e "$path" ] || { echo "$path missing"; exit 1; }
+          grep -R -o '@[^ )\n]*' .cursor/rules/*.mdc | sed 's/.*@//' | while read path; do
+            if echo "$path" | grep -qE '/|\.'; then
+              [ -e "$path" ] || { echo "$path missing"; exit 1; }
+            fi
           done

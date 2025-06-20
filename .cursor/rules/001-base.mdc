@@ -24,7 +24,7 @@ alwaysApply: true
 ## 📚 Context Precedence
 1. Rule files (lower numbers have higher priority)
 2. Existing source code patterns
-3. Referenced documentation (@docs/, @README.md)
+3. Referenced documentation (@FAQ.md, @README.md)
 4. Chat prompts and user requests
 
 ## 🚫 Prohibited Actions
