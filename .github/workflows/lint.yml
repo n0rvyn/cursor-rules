@@ -69,4 +69,12 @@ jobs:
             fi
           done
           
-          echo "✅ All rule files follow naming convention" 
+          echo "✅ All rule files follow naming convention"
+      - name: Check @references
+        run: |
+          grep -R --no-line-number '@' .cursor/rules/*.mdc \
+            | sed 's/.*@//' \
+            | while read path; do
+              [ -z "$path" ] && continue
+              [ -e "$path" ] || { echo "$path missing"; exit 1; }
+            done

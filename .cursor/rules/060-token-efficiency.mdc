@@ -1,5 +1,5 @@
 ---
-description:
+description: "060: Token efficiency and context management"
 globs:
 alwaysApply: false
 ---

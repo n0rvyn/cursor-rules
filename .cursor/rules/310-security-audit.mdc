@@ -1,13 +1,13 @@
 ---
-description:
+description: "310: Security audit"
 globs:
 alwaysApply: false
 ---
 ---
-description: Security audit checklist and secure coding practices
+description: "310: Security audit checklist and secure coding practices"
 scopes: [chat, edit]
 tags: [security, audit]
-priority: 300
+priority: 310
 ---
 
 ## 🔒 Security Audit Standards

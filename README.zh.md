@@ -6,11 +6,16 @@
 
 - ✅ **YAML 语法检查** - GitHub Actions 自动验证规则语法
 - ✅ **作用域和标签** - 现代 Cursor 功能，支持选择性规则启用
-- ✅ **Shell 支持** - 专门的 Bash/Shell 脚本规则 (105-shell-specific.mdc)
+- ✅ **Shell 支持** - 专门的 Bash/Shell 脚本规则 (105-bash-conventions.mdc)
 - ✅ **FAQ 和示例** - 全面的文档和 `.cursorignore` 示例
 - ✅ **增强优先级系统** - 清晰的规则优先级字段
 
 ## 🚀 快速开始
+
+### 一行安装
+```bash
+curl -s https://raw.githubusercontent.com/n0rvyn/cursor-rules/main/install-cursor-rules.sh | bash
+```
 
 ### 1. 复制配置
 ```bash
@@ -64,11 +69,15 @@ cp -r .cursor your-project/
 │   │   ├── 030-test-driven.mdc # TDD 模式
 │   │   ├── 050-anti-hallucination.mdc # AI 保护策略
 │   │   ├── 060-token-efficiency.mdc # 性能优化
+│   │   ├── 090-env-schema.mdc      # 环境变量名称文档
 │   │   ├── 100-python-specific.mdc # Python 模板和模式
-│   │   ├── 105-shell-specific.mdc # Shell/Bash 最佳实践
+│   │   ├── 105-bash-conventions.mdc # Shell/Bash 最佳实践
 │   │   ├── 110-typescript-specific.mdc # TypeScript/React 模式
-│   │   ├── 200-api-design.mdc  # API 开发标准
-│   │   └── 300-security-audit.mdc # 安全和合规性
+│   │   ├── 200-bugbot-autofix.mdc  # BugBot PR 工作流
+│   │   ├── 210-api-design.mdc  # API 开发标准
+│   │   ├── 300-commit-msg.mdc  # 约定式提交
+│   │   ├── 310-security-audit.mdc # 安全和合规性
+│   │   └── 400-reactive-storage.mdc # React 状态模式
 │   └── team-rules-examples/    # 团队协作模板
 │       ├── enterprise/
 │       │   └── governance/
@@ -97,13 +106,15 @@ cp -r .cursor your-project/
 - **010-checklist.mdc**: 自动任务列表维护
 - **020-safety.mdc**: 基本错误预防
 - **050-anti-hallucination.mdc**: 高级 AI 保护策略
+- **060-token-efficiency.mdc**: 性能优化
+- **090-env-schema.mdc**: 环境变量名称文档
 
 ### 语言特定规则（可选）
 - **100-python.mdc**: 类型提示、async/await、pytest 模式
-- **105-shell-specific.mdc**: Shell/Bash 脚本最佳实践、错误处理
+- **105-bash-conventions.mdc**: Shell/Bash 脚本最佳实践、错误处理
 - **110-typescript.mdc**: 严格类型、React 模式、Jest 测试
-- **200-api-design.mdc**: RESTful 约定、OpenAPI 文档
-- **300-security.mdc**: 安全最佳实践和合规性
+- **210-api-design.mdc**: RESTful 约定、OpenAPI 文档
+- **300-commit-msg.mdc**: 约定式提交信息指南
 
 ### 现代规则功能
 所有规则现在包括：
@@ -183,12 +194,15 @@ alwaysApply: true                   # 始终 vs 条件激活
 
 ### 语言特定规则 (100-199)
 - **100-python-specific.mdc**: 模板优先开发、类型提示、异步模式、测试约定
-- **105-shell-specific.mdc**: Bash 最佳实践、错误处理、安全考虑、shellcheck 合规性
+- **105-bash-conventions.mdc**: Bash 最佳实践、错误处理、安全考虑、shellcheck 合规性
 - **110-typescript-specific.mdc**: 模板驱动 React/Express 模式、严格 TypeScript、现代框架
 
 ### 领域特定规则 (200-399)
-- **200-api-design.mdc**: 模板优先 API 开发、RESTful 约定、OpenAPI 文档
-- **300-security-audit.mdc**: 综合安全标准、最佳实践、合规性清单
+- **200-bugbot-autofix.mdc**: 处理 BugBot PR 评论
+- **210-api-design.mdc**: 模板优先 API 开发、RESTful 约定、OpenAPI 文档
+- **300-commit-msg.mdc**: 约定式提交信息指南
+- **310-security-audit.mdc**: 综合安全标准、最佳实践、合规性清单
+- **400-reactive-storage.mdc**: React 状态管理模式
 
 ### 模板库 (`/templates/`)
 - **express-service.ts**: 完整的 Express 服务，包含验证、错误处理、TypeScript 类型
