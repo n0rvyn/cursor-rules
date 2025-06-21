@@ -7,6 +7,7 @@
 - ✅ **YAML 语法检查** - GitHub Actions 自动验证规则语法
 - ✅ **作用域和标签** - 现代 Cursor 功能，支持选择性规则启用
 - ✅ **Shell 支持** - 专门的 Bash/Shell 脚本规则 (105-bash-conventions.mdc)
+- ✅ **Swift/iOS 支持** - Swift 语言规则 (120-swift-specific.mdc) 及 iPhone 项目模板
 - ✅ **FAQ 和示例** - 全面的文档和 `.cursorignore` 示例
 - ✅ **增强优先级系统** - 清晰的规则优先级字段
 
@@ -73,6 +74,7 @@ cp -r .cursor your-project/
 │   │   ├── 100-python-specific.mdc # Python 模板和模式
 │   │   ├── 105-bash-conventions.mdc # Shell/Bash 最佳实践
 │   │   ├── 110-typescript-specific.mdc # TypeScript/React 模式
+│   │   ├── 120-swift-specific.mdc # Swift/iOS 模式
 │   │   ├── 200-bugbot-autofix.mdc  # BugBot PR 工作流
 │   │   ├── 210-api-design.mdc  # API 开发标准
 │   │   ├── 300-commit-msg.mdc  # 约定式提交
@@ -83,9 +85,13 @@ cp -r .cursor your-project/
 │       │   └── governance/
 │       │       └── approval-process.mdc
 │       ├── languages/
-│       │   └── go/
-│       │       └── go-specific.mdc
+│       │   ├── go/
+│       │   │   └── go-specific.mdc
+│       │   └── swift/
+│       │       └── swift-specific.mdc
 │       ├── projects/
+│       │   ├── ios-app/
+│       │   │   └── ios-project.mdc
 │       │   └── web-api/
 │       │       └── api-project.mdc
 │       ├── README.md
@@ -196,6 +202,7 @@ alwaysApply: true                   # 始终 vs 条件激活
 - **100-python-specific.mdc**: 模板优先开发、类型提示、异步模式、测试约定
 - **105-bash-conventions.mdc**: Bash 最佳实践、错误处理、安全考虑、shellcheck 合规性
 - **110-typescript-specific.mdc**: 模板驱动 React/Express 模式、严格 TypeScript、现代框架
+- **120-swift-specific.mdc**: Swift 模式、异步并发、XCTest 指南
 
 ### 领域特定规则 (200-399)
 - **200-bugbot-autofix.mdc**: 处理 BugBot PR 评论
@@ -476,6 +483,12 @@ cp templates/python-service.py your-project/templates/
 cp .cursor/rules/110-typescript-specific.mdc your-project/.cursor/rules/
 cp templates/react-component.tsx your-project/templates/
 cp templates/express-service.ts your-project/templates/
+```
+
+### Swift 项目
+```bash
+# 复制 Swift 特定规则
+cp .cursor/rules/120-swift-specific.mdc your-project/.cursor/rules/
 ```
 
 ## 🔍 故障排除

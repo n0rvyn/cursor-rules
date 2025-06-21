@@ -7,6 +7,7 @@
 - ✅ **YAML Linting** - GitHub Actions automatically validate rule syntax
 - ✅ **Scopes & Tags** - Modern Cursor features for selective rule enabling
 - ✅ **Shell Support** - Dedicated Bash/Shell scripting rules (105-bash-conventions.mdc)
+- ✅ **Swift/iOS Support** - Dedicated Swift rules (120-swift-specific.mdc) and iPhone project template
 - ✅ **FAQ & Examples** - Comprehensive documentation and `.cursorignore` examples
 - ✅ **Enhanced Priority System** - Clear rule precedence with priority fields
 
@@ -75,6 +76,7 @@ cp -r .cursor your-project/
 │   │   ├── 100-python-specific.mdc # Python templates & patterns
 │   │   ├── 105-bash-conventions.mdc # Shell/Bash best practices
 │   │   ├── 110-typescript-specific.mdc # TypeScript/React patterns
+│   │   ├── 120-swift-specific.mdc # Swift/iOS patterns
 │   │   ├── 200-bugbot-autofix.mdc  # BugBot PR workflow
 │   │   ├── 210-api-design.mdc  # API development standards
 │   │   ├── 300-commit-msg.mdc  # Conventional commit guidance
@@ -85,9 +87,13 @@ cp -r .cursor your-project/
 │       │   └── governance/
 │       │       └── approval-process.mdc
 │       ├── languages/
-│       │   └── go/
-│       │       └── go-specific.mdc
+│       │   ├── go/
+│       │   │   └── go-specific.mdc
+│       │   └── swift/
+│       │       └── swift-specific.mdc
 │       ├── projects/
+│       │   ├── ios-app/
+│       │   │   └── ios-project.mdc
 │       │   └── web-api/
 │       │       └── api-project.mdc
 │       ├── README.md
@@ -115,6 +121,7 @@ cp -r .cursor your-project/
 - **100-python.mdc**: Type hints, async/await, pytest patterns
 - **105-bash-conventions.mdc**: Shell/Bash scripting best practices, error handling
 - **110-typescript.mdc**: Strict typing, React patterns, Jest testing
+- **120-swift.mdc**: Swift language patterns, async concurrency, XCTest guidelines
 - **210-api-design.mdc**: RESTful conventions, OpenAPI documentation
 - **300-commit-msg.mdc**: Conventional commit guidance
 
@@ -474,6 +481,12 @@ cp templates/python-service.py your-project/templates/
 cp .cursor/rules/110-typescript-specific.mdc your-project/.cursor/rules/
 cp templates/react-component.tsx your-project/templates/
 cp templates/express-service.ts your-project/templates/
+```
+
+### Swift Projects
+```bash
+# Copy Swift-specific rules
+cp .cursor/rules/120-swift-specific.mdc your-project/.cursor/rules/
 ```
 
 ## 🔍 Troubleshooting
