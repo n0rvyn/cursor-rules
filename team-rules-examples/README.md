@@ -44,9 +44,13 @@ cursor-team-rules/
 ├── shared/
 │   └── 010-security-baseline.mdc    # Security requirements for all projects
 ├── languages/
-│   └── go/
-│       └── go-specific.mdc          # Go language conventions
+│   ├── go/
+│   │   └── go-specific.mdc          # Go language conventions
+│   └── swift/
+│       └── swift-specific.mdc       # Swift language conventions
 ├── projects/
+│   ├── ios-app/
+│   │   └── ios-project.mdc          # iPhone app project rules
 │   └── web-api/
 │       └── api-project.mdc          # Web API specific rules
 └── enterprise/
@@ -60,9 +64,11 @@ cursor-team-rules/
 - **Go**: `languages/go/go-specific.mdc` - Idiomatic Go patterns, error handling, concurrency
 - **Python**: Already in core rules as `100-python-specific.mdc`
 - **TypeScript**: Already in core rules as `110-typescript-specific.mdc`
+- **Swift**: `languages/swift/swift-specific.mdc` - SwiftLint, SPM, XCTest patterns
 
 ### Project-Type Rules
 - **Web API**: `projects/web-api/api-project.mdc` - RESTful patterns, OpenAPI docs
+- **iOS App**: `projects/ios-app/ios-project.mdc` - Xcode workspace, SwiftUI guidelines
 - **Security**: `shared/010-security-baseline.mdc` - Basic security requirements
 
 ### Enterprise Features
