@@ -1,0 +1,64 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+---
+description: "210: RESTful API design principles and patterns"
+scopes: [chat, edit]
+tags: [api, design-patterns]
+priority: 210
+---
+
+## 🎯 Template-First Approach
+- **Express Services**: Use skeleton from @templates/express-service.ts for new API endpoints
+- **Python Services**: Use pattern from @templates/python-service.py for async service classes
+- **React Components**: Follow @templates/react-component.tsx for UI components
+
+## 📡 RESTful Conventions
+- Use HTTP verbs correctly: GET (read), POST (create), PUT (update), DELETE (remove)
+- Resource URLs: `/api/users/{id}` not `/api/getUser?id=123`
+- Return consistent JSON structure: `{success: boolean, data?: any, error?: string}`
+- Use proper HTTP status codes: 200, 201, 400, 401, 403, 404, 500
+
+## 🔐 Security Standards
+- Always validate input parameters using middleware (express-validator, Joi, etc.)
+- Implement rate limiting on all public endpoints
+- Use HTTPS in production, include security headers
+- Never expose internal error details to clients
+
+## 📝 Documentation Requirements
+- Include OpenAPI/Swagger documentation for all endpoints
+- Document request/response schemas with examples
+- Maintain API versioning strategy: `/api/v1/`, `/api/v2/`
+- Keep CHANGELOG.md updated for API changes
+
+## 🚨 DEV ONLY - Development Environment
+*These rules apply only during development*
+- Enable detailed error logging with stack traces
+- Allow CORS from localhost origins
+- Include debug endpoints for testing
+- Use development database with seed data
+
+## 🔒 PROD ONLY - Production Environment
+*These rules apply only in production*
+- Disable debug endpoints and verbose logging
+- Implement strict CORS policies
+- Use environment variables for all configuration
+- Enable request logging and monitoring
+- Implement circuit breaker patterns for external services
+
+## 🎛️ Error Handling
+- Use custom error classes with proper inheritance
+- Log errors with context (user ID, request ID, timestamp)
+- Return user-friendly error messages
+- Implement retry logic for transient failures
+
+## 📊 Performance Optimization
+- Implement response caching where appropriate
+- Use database indexing for frequently queried fields
+- Implement pagination for list endpoints (limit/offset or cursor-based)
+- Monitor response times and set SLA targets
+
+- Compress responses when beneficial
+- Monitor API performance and set SLA targets

@@ -1,0 +1,109 @@
+---
+description: "110: TypeScript/JavaScript patterns and conventions"
+globs:
+alwaysApply: false
+---
+---
+description: "110: TypeScript/JavaScript patterns and conventions"
+scopes: [chat, edit]
+tags: [typescript, javascript, language-specific]
+priority: 110
+---
+
+## 🎯 Template-First Development
+- **React Components**: Use @templates/react-component.tsx for new UI components
+- **Express Services**: Use @templates/express-service.ts for API endpoints
+- **Type Safety**: Follow strict TypeScript patterns from templates
+
+## 🏗️ TypeScript Fundamentals
+- Enable strict mode in `tsconfig.json`: `"strict": true`
+- Use explicit return types for functions: `function getName(): string`
+- Prefer `interface` over `type` for object shapes
+- Use `readonly` for immutable data structures
+- Avoid `any` type; use `unknown` when type is truly unknown
+
+## ⚛️ React Best Practices
+- Use functional components with hooks over class components
+- Implement proper TypeScript props interfaces
+- Use `React.FC<Props>` or explicit return type `JSX.Element`
+- Include accessibility attributes (`aria-*`, `role`)
+- Implement error boundaries for component error handling
+
+## 🔧 Modern JavaScript/TypeScript Features
+- Use optional chaining: `object?.property?.method?.()`
+- Use nullish coalescing: `value ?? defaultValue`
+- Prefer `const` assertions: `as const` for immutable arrays/objects
+- Use template literals over string concatenation
+- Implement proper async/await error handling
+
+## 📦 Module Organization
+- Use ES6 imports/exports: `import { function } from './module'`
+- Organize imports: external → internal → relative
+- Use barrel exports (`index.ts`) for clean import paths
+- Implement proper module boundaries and dependency injection
+
+## 🚨 DEV ONLY - Development Environment
+*These rules apply only during development*
+- Use `console.log` for debugging (remove before production)
+- Enable source maps for debugging: `"sourceMap": true`
+- Use development React build for better error messages
+- Include developer tools and hot module replacement
+- Allow `@ts-ignore` comments for third-party library issues
+
+## 🔒 PROD ONLY - Production Environment
+*These rules apply only in production*
+- No `console.log` statements allowed
+- Enable production React build for optimization
+- Remove all `@ts-ignore` comments
+- Use environment variables for configuration
+- Implement proper error logging service
+- Enable tree shaking and code splitting
+
+## 🧪 Testing Standards
+- Use Jest for unit testing with TypeScript support
+- Test files: `*.test.ts` or `*.spec.ts`
+- Use React Testing Library for component testing
+- Mock external dependencies and API calls
+- Aim for >80% code coverage on critical paths
+- Type your test fixtures and mocks properly
+
+## 🔍 Code Quality & Tooling
+- Use ESLint with TypeScript rules
+- Use Prettier for consistent formatting
+- Configure Husky for pre-commit hooks
+- Use `tsc --noEmit` for type checking in CI
+- Implement import sorting with eslint-plugin-import
+
+## 🔷 TypeScript-Specific Rules
+- No implicit any: all variables must have explicit types
+- Use interfaces for object types, type aliases for unions/intersections
+- Prefer `const assertions` for immutable data
+- Use proper access modifiers: `private`, `protected`, `public`
+
+## Type Definitions
+- Define interfaces for all data structures
+- Use generic types where appropriate: `Array<T>`, `Promise<T>`
+- Prefer `unknown` over `any` when type is uncertain
+- Use type guards for runtime type checking
+
+## Code Organization
+- One export per file for components/classes
+- Use barrel exports (index.ts) for modules
+- Separate types into dedicated `.types.ts` files
+- Use proper import/export syntax
+
+## React/TSX Specific (if applicable)
+- Use functional components with hooks
+- Define component props with interfaces
+- Use `React.FC<Props>` or explicit return types
+- Handle events with proper TypeScript event types
+
+## Error Handling
+- Use discriminated unions for error states
+- Prefer Result/Either patterns over throwing exceptions
+- Type your catch blocks: `catch (error: unknown)`
+
+## Testing
+- Use Jest with TypeScript configuration
+- Type your test fixtures and mocks
+- Use `@testing-library` for React component testing

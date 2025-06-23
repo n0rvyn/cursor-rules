@@ -1,0 +1,129 @@
+# Cursor Ignore Patterns
+# Add this to your project root as .cursorignore to exclude files from Cursor's context
+
+# Dependencies & Package Managers
+node_modules/
+__pycache__/
+.venv/
+venv/
+env/
+.env/
+dist/
+build/
+.eggs/
+*.egg-info/
+wheels/
+pip-wheel-metadata/
+
+# Python specific
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.pdm-python
+.ruff_cache/
+
+# Shell/Bash
+*.sh.backup
+*.sh.old
+.bash_history
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.temp
+*.cache
+*.pid
+*.lock
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vim/
+
+# Version Control
+.git/
+.svn/
+.hg/
+
+# Documentation Build
+docs/_build/
+site/
+.jekyll-cache/
+
+# Large Data Files (commonly excluded)
+data/
+datasets/
+*.csv
+*.json.gz
+*.parquet
+*.db
+*.sqlite
+*.sqlite3
+
+# Media Files
+*.mp4
+*.avi
+*.mp3
+*.wav
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project-specific patterns (uncomment as needed)
+# secrets/
+# config/local.py
+# .env.local
+# *.secret
+# credentials.json
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+.conda/
+conda-meta/
+
+# Testing
+.coverage
+.pytest_cache/
+test-reports/
+coverage/
+
+# Documentation
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx 

@@ -1,0 +1,93 @@
+---
+description: "105: Shell/Bash scripting conventions and best practices"
+scopes: [chat, edit]
+tags: [shell, bash, scripting, language-specific]
+priority: 105
+globs:
+  - "**/*.sh"
+  - "**/*.bash"
+  - "**/.*rc"
+  - "**/.*profile"
+---
+
+## 🐚 Shell/Bash-Specific Rules
+- Always start scripts with proper shebang: `#!/bin/bash` or `#!/usr/bin/env bash`
+- Use `set -euo pipefail` for safer scripting (exit on error, undefined vars, pipe failures)
+- Quote variables to prevent word splitting: `"$var"` not `$var`
+- Use `[[ ]]` for conditionals instead of `[ ]`
+- Prefer `$(command)` over backticks for command substitution
+
+## Error Handling
+- Check command success with `if command; then` or `command || exit 1`
+- Use meaningful exit codes (0=success, 1-255=error)
+- Provide helpful error messages with line numbers when possible
+- Use `trap` for cleanup on script exit
+
+## Variables & Parameters
+- Use `readonly` for constants: `readonly CONFIG_FILE="/etc/myapp.conf"`
+- Validate required parameters: `[[ -z "$1" ]] && { echo "Usage: $0 <param>"; exit 1; }`
+- Use `local` for function variables: `local temp_file="/tmp/$$"`
+- Use descriptive variable names: `user_input` not `ui`
+
+## Functions
+- Define functions before use
+- Use `local` for function-scoped variables
+- Return status codes, not strings: `return 0` for success
+- Use `printf` instead of `echo` for formatted output
+
+## File Operations
+- Check file existence: `[[ -f "$file" ]] || { echo "File not found"; exit 1; }`
+- Use proper permissions: `chmod 755` for executables, `chmod 644` for data files
+- Create temporary files safely: `temp_file=$(mktemp)` and `trap 'rm -f "$temp_file"' EXIT`
+- Use absolute paths when possible or validate relative paths
+
+## Best Practices
+- Keep lines under 80 characters when possible
+- Use consistent indentation (2 or 4 spaces)
+- Add comments for complex logic
+- Use shellcheck for linting: `shellcheck script.sh`
+- Make scripts idempotent when possible (safe to run multiple times)
+
+## Common Patterns
+```bash
+#!/bin/bash
+set -euo pipefail
+
+# Constants
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly CONFIG_FILE="${SCRIPT_DIR}/config"
+
+# Functions
+log_info() {
+    printf "[INFO] %s\n" "$*" >&2
+}
+
+log_error() {
+    printf "[ERROR] %s\n" "$*" >&2
+}
+
+# Main logic
+main() {
+    local input_file="$1"
+    
+    [[ -f "$input_file" ]] || {
+        log_error "Input file does not exist: $input_file"
+        return 1
+    }
+    
+    log_info "Processing file: $input_file"
+    # Process file here
+}
+
+# Entry point
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+```
+
+## Security Considerations
+- Validate all user inputs
+- Avoid `eval` unless absolutely necessary
+- Use `read -r` to prevent backslash interpretation
+- Be careful with file permissions and temporary files
+- Never trust external input without validation

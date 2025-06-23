@@ -1,0 +1,27 @@
+---
+description: "010: Keep DEV_CHECKLIST.md up-to-date"
+scopes: [chat, edit]
+tags: [workflow, documentation]
+priority: 10
+alwaysApply: true
+---
+
+## ✨ Checklist Workflow
+1. **After analyzing the prompt**  
+   - If `/DEV_CHECKLIST.md` is missing, create it with the title "Development Checklist"
+   - Parse the prompt; for each task append: `- [ ] <verb + task>`
+
+2. **Whenever you modify code**  
+   - Tick relevant items `- [x]` and append "✅ YYYY-MM-DD"
+   - Add new unchecked items for fresh TODOs
+
+3. **Sections order**  
+   ```
+   ### Features
+   ### Refactors
+   ### Tests
+   ### Documentation
+   ### Chores
+   ```
+
+4. **Never delete** completed items; history must stay for diff review

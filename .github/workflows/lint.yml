@@ -1,0 +1,80 @@
+name: Lint & Validate Rules
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          
+      - name: Install yamllint
+        run: pip install yamllint
+        
+      - name: Create yamllint config
+        run: |
+          cat > .yamllint.yml << EOF
+          extends: default
+          rules:
+            line-length:
+              max: 120
+            document-start: disable
+            truthy: disable
+          EOF
+        
+      - name: Extract and validate YAML front-matter from .mdc files
+        run: |
+          echo "🔍 Checking .mdc files for valid YAML front-matter..."
+          
+          for file in $(find .cursor/rules -name "*.mdc"); do
+            echo "Checking: $file"
+            
+            # Check if file has front-matter delimiters
+            if ! grep -q "^---$" "$file"; then
+              echo "❌ Missing front-matter delimiters in $file"
+              exit 1
+            fi
+            
+            # Extract YAML front-matter (between first two --- lines)
+            sed -n '1,/^---$/p' "$file" | sed '1d;$d' > temp_yaml.yml
+            
+            # Validate YAML syntax
+            yamllint temp_yaml.yml || {
+              echo "❌ Invalid YAML in $file"
+              exit 1
+            }
+            
+            rm -f temp_yaml.yml
+          done
+          
+          echo "✅ All .mdc files have valid YAML front-matter"
+          
+      - name: Verify rule file naming convention
+        run: |
+          echo "🔍 Checking rule file naming convention..."
+          
+          for file in $(find .cursor/rules -name "*.mdc"); do
+            basename=$(basename "$file")
+            if ! [[ "$basename" =~ ^[0-9]{3}-[a-z-]+\.mdc$ ]]; then
+              echo "❌ Rule file $file doesn't follow naming convention: NNN-name.mdc"
+              exit 1
+            fi
+          done
+          
+          echo "✅ All rule files follow naming convention"
+      - name: Check @references
+        run: |
+          grep -R --no-line-number '@' .cursor/rules/*.mdc \
+            | sed 's/.*@//' \
+            | while read path; do
+              [ -z "$path" ] && continue
+              [ -e "$path" ] || { echo "$path missing"; exit 1; }
+            done

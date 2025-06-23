@@ -1,0 +1,13 @@
+---
+description: "020: Hallucination guardrails & file-by-file editing"
+scopes: [chat, edit]
+tags: [safety, guardrails]
+priority: 20
+alwaysApply: true
+---
+
+- **Verify context**: Before coding, compare referenced files to ensure information reliability
+- **No invention**: Only implement explicitly requested features
+- **One-file focus**: Edit only the current file at a time, review before switching to next
+- **Ask if unsure**: When uncertain → ask first
+- **Diff-only output**: Output complete single-file diff when submitting

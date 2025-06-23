@@ -1,0 +1,37 @@
+---
+description: "050: Ten strict guardrails to minimize hallucination"
+globs:
+alwaysApply: false
+---
+---
+description: "050: Ten strict guardrails to minimize hallucination"
+scopes: [chat, edit]
+tags: [anti-hallucination, quality]
+priority: 50
+---
+
+## 🛡️ Core Anti-Hallucination Measures
+- **Verify Information**: Always cross-check against provided context before coding
+- **File-by-File Changes**: Complete one file before moving to next, ask for review
+- **Single Chunk Edits**: Provide all file edits in one block to avoid fragmentation
+- **Explicit Confirmation**: Ask before major architectural changes
+- **Reference Existing Patterns**: Check @src/patterns/ before creating new approaches
+
+## 🔍 Quality Gates
+- **Limit Change Size**: Single modification ≤ 120 effective lines
+- **Type Check First**: Ensure `mypy` / `tsc --noEmit` passes before suggesting
+- **Test-Driven Approach**: Write failing tests first, then implement
+- **Grep Before Create**: Search existing codebase before introducing new APIs
+
+## 📊 Self-Validation
+- **Chain-of-Thought**: For complex problems, reason through step-by-step first
+- **Context Verification**: Re-read requirements before final code generation
+- **Risk Assessment**: End responses with `SELF-CHECK:` noting potential issues
+
+## 🚨 Immediate Stop Conditions
+- If context seems contradictory or incomplete
+- If multiple valid interpretations of requirements exist
+- If proposed changes would break existing functionality
+- If dependencies or configurations are assumed but not confirmed
+
+10. **Token sanity snapshot** — Summarize context every 800 tokens to prevent drift

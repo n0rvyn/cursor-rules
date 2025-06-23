@@ -1,0 +1,37 @@
+---
+description: "120: Swift-specific conventions"
+globs:
+  - "**/*.swift"
+alwaysApply: false
+---
+---
+description: "120: Swift language patterns and iOS best practices"
+scopes: [chat, edit]
+tags: [swift, ios, language-specific]
+priority: 120
+---
+
+## \ud83c\udf1f Swift Fundamentals
+- Prefer SwiftUI for new UI code
+- Use Swift Package Manager for dependencies
+- Keep functions short and focused on a single task
+- Favor `struct` over `class` when possible
+- Use protocol-oriented programming principles
+- Document public APIs with `///` comments
+
+## \ud83d\udd04 Async & Concurrency
+- Use `async/await` for asynchronous code (Swift 5.5+)
+- Avoid blocking the main thread; offload work to background queues
+- Leverage `Task` and `TaskGroup` for structured concurrency
+- Cancel tasks using `Task` cancellation when appropriate
+
+## \ud83d\udeaa Error Handling
+- Define custom `Error` enums for meaningful error cases
+- Propagate errors with `throws` and handle using `do/catch`
+- Avoid silently ignoring errors
+
+## \ud83d\udcdd Testing
+- Use XCTest for unit tests
+- Aim for high coverage of business logic
+- Inject dependencies for easier mocking
+- Run tests via `xcodebuild test` or Xcode CI pipelines
