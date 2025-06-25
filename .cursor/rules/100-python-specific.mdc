@@ -1,10 +1,6 @@
 ---
-description: "100: Python-specific conventions"
-globs:
-alwaysApply: false
----
----
 description: "100: Python-specific conventions and patterns"
+alwaysApply: false
 scopes: [chat, edit]
 tags: [python, language-specific]
 priority: 100

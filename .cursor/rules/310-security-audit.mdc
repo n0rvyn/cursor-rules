@@ -1,13 +1,9 @@
 ---
-description: "310: Security audit"
-globs:
-alwaysApply: false
----
----
 description: "310: Security audit checklist and secure coding practices"
 scopes: [chat, edit]
 tags: [security, audit]
 priority: 310
+alwaysApply: false
 ---
 
 ## 🔒 Security Audit Standards
@@ -16,6 +12,10 @@ priority: 310
 - Implement proper input validation and sanitization
 - Use parameterized queries to prevent SQL injection
 - Validate file uploads and restrict file types
+- Use dedicated secret management tools (HashiCorp Vault, AWS Secrets Manager)
+- Rotate secrets regularly
+- Use different secrets for different environments
+- Audit secret access and usage
 
 ## 🔐 Authentication & Authorization
 - Implement strong password policies
@@ -23,6 +23,8 @@ priority: 310
 - Implement proper role-based access control (RBAC)
 - Log authentication attempts and failures
 - Implement account lockout after failed attempts
+- Implement multi-factor authentication where possible
+- Use secure password hashing (bcrypt, scrypt, Argon2)
 
 ## 🛡️ Data Protection
 - Encrypt sensitive data at rest and in transit
@@ -30,6 +32,8 @@ priority: 310
 - Implement proper data retention policies
 - Follow privacy regulations (GDPR, CCPA)
 - Sanitize data in logs and error messages
+- Implement proper data classification
+- Ensure secure data disposal
 
 ## 🔍 Code Security
 - Keep dependencies up to date
@@ -37,6 +41,10 @@ priority: 310
 - Implement Content Security Policy (CSP) for web apps
 - Use secure coding practices to prevent XSS, CSRF
 - Validate and escape all user inputs
+- Regularly scan for known vulnerabilities
+- Use dependency pinning in production
+- Review third-party libraries before adoption
+- Monitor for security advisories
 
 ## 📊 Monitoring & Logging
 - Log security events and access attempts
@@ -44,6 +52,8 @@ priority: 310
 - Implement intrusion detection
 - Set up alerts for security incidents
 - Regular security assessments and penetration testing
+- Implement centralized logging
+- Avoid logging sensitive information
 
 ## 🚨 DEV ONLY - Development Environment
 *Security considerations for development*
@@ -70,4 +80,6 @@ priority: 310
 - [ ] Authorization checks in place
 - [ ] Security headers configured
 - [ ] Dependencies scanned for vulnerabilities
+- [ ] Logging and monitoring active
+
 - [ ] Logging and monitoring active

@@ -1,0 +1,51 @@
+---
+description: "Obsidian Community Compliance"
+globs: ["**/manifest.json", "**/*.ts", "**/*.md"]
+alwaysApply: false
+tags: ["obsidian", "plugin", "community"]
+priority: 220
+---
+
+## Obsidian Community Plugin Standards
+
+### Essential Compliance Checklist
+
+- `manifest.json` fields: `id`, `name`, `version`, `minAppVersion`, `author` **must be valid**.
+- Follow semantic versioning; bump `patch` for fixes, `minor` for features, `major` for breaking changes.
+- Provide `README.md` with install, usage & changelog sections.
+- Keep bundle size ≤1 MB and avoid native dependencies.
+- Respect the [Community Guidelines](@Web "Obsidian plugin guidelines").
+
+### Development Resources
+
+- Official reference: [Obsidian Developer Docs](https://docs.obsidian.md/)
+- Sample plugin template: [obsidianmd/obsidian-sample-plugin](https://github.com/obsidianmd/obsidian-sample-plugin)
+- API documentation: [obsidianmd/obsidian-api](https://github.com/obsidianmd/obsidian-api)
+- Utility for modifying core functions: [pjeby/monkey-around](https://github.com/pjeby/monkey-around)
+
+### Technical Capabilities & Limitations
+
+- **Core Function Extension:** Plugins can extend or modify most core Obsidian functionality
+- **Third-party APIs:** Integration with external services is supported (e.g., Google Maps, OpenStreetMap)
+- **JavaScript/HTML:** Full support for rendering custom HTML/JS in notes
+- **Web Assembly:** Supported but rarely necessary for most plugin use cases
+- **Electron Limitations:** Some features may be constrained by Electron security policies
+
+### Best Practices
+
+- **Performance:** Minimize impact on app startup and note rendering time
+- **Mobile Compatibility:** Test functionality on both desktop and mobile platforms
+- **Security:** Never expose user data to external services without explicit consent
+- **UI/UX:** Follow Obsidian's design patterns for consistent user experience
+- **Error Handling:** Gracefully handle errors and provide meaningful user feedback
+- **Settings:** Provide user-configurable options for customizing plugin behavior
+- **Internationalization:** Support multiple languages when possible
+
+### Publishing Requirements
+
+- Check existing plugins first to avoid duplicating functionality
+- Publish initial version to GitHub with proper version tagging
+- Include these files in GitHub releases: `manifest.json`, `main.js`, `styles.css`
+- Add funding information to manifest (optional): `"fundingUrl": "https://..."`
+- Submit PR to [obsidianmd/obsidian-releases](https://github.com/obsidianmd/obsidian-releases) for community listing
+- Maintain compatibility with older Obsidian versions via `versions.json`

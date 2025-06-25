@@ -3,6 +3,7 @@ description: "060: Token efficiency and context management"
 globs:
 alwaysApply: false
 ---
+
 ## 💰 Token Conservation
 - **Template References**: Use `@templates/pattern.ts` instead of explaining patterns
 - **Diff-Only Responses**: Output code changes, minimize explanatory text

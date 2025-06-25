@@ -1,9 +1,4 @@
 ---
-description: "001: base rule"
-globs:
-alwaysApply: false
----
----
 description: "001: Global coding conventions & context order"
 globs: ["**/*.py", "**/*.ts"]
 alwaysApply: true

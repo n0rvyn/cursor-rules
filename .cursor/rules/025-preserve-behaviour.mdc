@@ -1,0 +1,18 @@
+---
+description: "Keep existing functionality intact & minimise diffs"
+globs: ["src/**/*.*", "plugins/**/*.*"]
+alwaysApply: true
+tags: ["safety", "compat"]
+---
+
+## Behaviour-Preservation
+
+- **No regressions**: New features or bug-fixes **must not break** public APIs or observable behaviour.
+- **Minimal patch**: Touch only the lines strictly required.
+  - Large rewrites are *prohibited* unless explicitly requested.
+  - Prefer wrapper functions or targeted refactors.
+
+*When unsure, ask the user to run the test suite first.*
+
+
+

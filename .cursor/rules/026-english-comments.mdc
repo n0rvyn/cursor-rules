@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+description: "Enforce English-only code comments"
+globs: ["src/**/*.{ts,tsx,js,py,go,rs,java}"]
+priority: 26
+tags: ["style", "i18n"]
+---
+
+## Comment Language
+
+All inline, block and docstring comments **MUST be written in English**.
+If you need a Chinese note, wrap it in `<!-- zh-note: ... -->` so it stays out of code.

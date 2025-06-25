@@ -1,10 +1,5 @@
 ---
 description: "110: TypeScript/JavaScript patterns and conventions"
-globs:
-alwaysApply: false
----
----
-description: "110: TypeScript/JavaScript patterns and conventions"
 scopes: [chat, edit]
 tags: [typescript, javascript, language-specific]
 priority: 110

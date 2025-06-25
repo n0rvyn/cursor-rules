@@ -1,0 +1,49 @@
+---
+description: "101: Go-specific conventions"
+globs:
+alwaysApply: false
+priority: 101
+---
+
+## 🐹 Go-Specific Rules
+
+### Code Style
+- Follow `gofmt` formatting strictly
+- Use `golint` and `go vet` for static analysis
+- Organize imports: standard library → third-party → local
+- Use meaningful package names (lowercase, no underscores)
+- Keep package names short and descriptive
+
+### Error Handling
+- Always check and handle errors explicitly
+- Use the idiomatic `if err != nil` pattern
+- Create custom error types when appropriate
+- Wrap errors with context using `fmt.Errorf` or `errors.Wrap`
+- Don't panic in library code, return errors instead
+
+### Concurrency
+- Use goroutines for concurrent operations
+- Prefer channels for communication between goroutines
+- Use `context.Context` for cancellation and timeouts
+- Avoid shared mutable state, use channels or mutexes
+- Follow the principle: "Don't communicate by sharing memory; share memory by communicating"
+
+### Performance
+- Use proper data structures: slices vs arrays, maps vs slices
+- Pre-allocate slices when size is known: `make([]Type, 0, capacity)`
+- Use string builder for concatenating multiple strings
+- Profile performance-critical code with `go test -bench`
+- Avoid premature optimization
+
+### Testing
+- Write table-driven tests when appropriate
+- Use `t.Helper()` in test helper functions
+- Test both success and failure cases
+- Use `go test -race` to detect race conditions
+- Benchmark performance-critical functions
+
+### Documentation
+- Use `godoc` format for public functions and types
+- Start comments with the name being documented
+- Provide examples in documentation when helpful
+- Keep comments concise and focused on "why" not "what"

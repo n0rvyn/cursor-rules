@@ -1,10 +1,5 @@
 ---
 description: "050: Ten strict guardrails to minimize hallucination"
-globs:
-alwaysApply: false
----
----
-description: "050: Ten strict guardrails to minimize hallucination"
 scopes: [chat, edit]
 tags: [anti-hallucination, quality]
 priority: 50

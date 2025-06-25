@@ -1,13 +1,8 @@
 ---
-description: "120: Swift-specific conventions"
-globs:
-  - "**/*.swift"
-alwaysApply: false
----
----
 description: "120: Swift language patterns and iOS best practices"
 scopes: [chat, edit]
 tags: [swift, ios, language-specific]
+alwaysApply: false
 priority: 120
 ---
 
