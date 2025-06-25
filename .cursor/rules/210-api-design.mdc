@@ -3,6 +3,7 @@ description: "210: RESTful API design principles and patterns"
 scopes: [chat, edit]
 tags: [api, design-patterns]
 priority: 210
+---
 ## 🎯 Template-First Approach
 - **Express Services**: Use skeleton from @templates/express-service.ts for new API endpoints
 - **Python Services**: Use pattern from @templates/python-service.py for async service classes
