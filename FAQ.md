@@ -124,6 +124,7 @@ globs:
 ### How do I share rules with my team?
 1. **Fork this repository**
 2. **Customize rules for your needs**
+   - Copy templates from the `templates/` directory for common patterns
 3. **Share the installation script:**
    ```bash
    curl -sL https://raw.githubusercontent.com/YOUR_USERNAME/cursor-rules/main/install-cursor-rules.sh | bash
@@ -132,6 +133,7 @@ globs:
 ### What's the difference between `alwaysApply` and regular rules?
 - `alwaysApply: true` - Rule is active in all contexts
 - Regular rules - Only active when file patterns match `globs`
+- Priority still controls which rule wins when multiple `alwaysApply` rules apply
 
 ### How do I debug rule conflicts?
 1. **Check rule loading order:**
@@ -150,4 +152,8 @@ globs:
 
 ---
 
-> 💡 **Tip**: Start with the base rules and gradually add language-specific ones. Don't enable everything at once! 
+> 💡 **Tip**: Start with the base rules and gradually add language-specific ones. Don't enable everything at once!
+
+### How do I automate rule checks?
+1. Install `pre-commit` and add hooks for linting and tests.
+2. Mirror the same commands in your CI pipeline so every push runs the checks.

@@ -164,6 +164,34 @@ alwaysApply: true                   # Always vs conditional activation
 | **Agent Requested** | `description` required | AI decides based on description |
 | **Manual** | Default | Only when explicitly called with `@ruleName` |
 
+**Examples**
+
+```mdc
+---
+description: "Always enforce lint"  # Always
+alwaysApply: true
+---
+```
+
+```mdc
+---
+description: "Attach for UI components"  # Auto attached
+globs: ["src/components/**/*.tsx"]
+---
+```
+
+```mdc
+---
+description: "Refactor suggestions"  # Agent requested
+---
+```
+
+```mdc
+---
+description: "Internal rule, call with @my-rule"  # Manual
+---
+```
+
 **💡 Best Practices:**
 - Keep rules under 500 lines for optimal performance
 - Use specific, actionable language
@@ -221,6 +249,9 @@ alwaysApply: true                   # Always vs conditional activation
 - **Scope Control**: `alwaysApply: true` for critical rules
 - **Contextual Application**: Rules activate based on file type and project context
 - **Two-Stage Activation**: Rules are first injected into context, then AI decides relevance based on description
+- **Precedence Note**: `alwaysApply` rules are always injected, but priority still determines the order when multiple rules apply
+
+When two rules apply to the same file, the one with the lower numeric priority is inserted first. `alwaysApply` simply ensures a rule is active; it does not override priority.
 
 ### Advanced Rule Techniques
 
@@ -263,6 +294,12 @@ project/
     .cursor/rules/        # Frontend-specific rules
 ```
 
+#### Extending and Customizing Rules
+1. Copy an existing rule from `.cursor/rules` and adjust the front matter.
+2. Reference reusable code under `templates/` with `@templates/<file>`.
+3. Increase the `priority` number to override default behavior.
+4. Commit the new rule so it is shared with your team.
+
 #### Combined Rule Types
 Rules can be both auto-attached AND agent-requested:
 ```mdc
@@ -295,7 +332,8 @@ Our rule system implements research-backed techniques to reduce AI errors:
 
 ### Automated Safeguards
 - **DEV_CHECKLIST.md**: Automatic task tracking and completion verification
-- **Git Integration**: Pre-commit hooks prevent incomplete work from being committed
+- **Git Integration**: Pre-commit hooks run lint and tests before each commit
+- **CI Pipelines**: Mirror the pre-commit checks in your build server
 - **Progress Checkpoints**: Structured workflow prevents scope creep
 
 ## 🚀 Advanced Techniques
