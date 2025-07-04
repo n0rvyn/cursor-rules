@@ -1,0 +1,15 @@
+---
+description: "002: Chunked read 200 lines"
+globs:
+alwaysApply: essential
+---
+
+### 📄 Rule: chunked-read-200
+1. Whenever you need to inspect a file, read it in fixed blocks of 200 lines:
+   Command: `Read <file> L<start>-<start + 199>`.
+2. Start from line 1 unless the user specifies otherwise.
+   After each block, immediately request the next, i.e.
+   `Read <file> L<prev_end + 1>-<prev_end + 200>`.
+3. Continue until end-of-file, with **no overlap** unless user asks.
+4. Do not show or request the same line twice.
+5. Keep interim context only until final summary to save tokens.
