@@ -1,0 +1,18 @@
+---
+description: "410: Enforce brand colour tokens & dark-mode behaviour"
+scopes: [chat, edit]
+tags: [design, colors]
+priority: 410
+alwaysApply: false
+globs: ["**/*.swift"]
+---
+
+
+# Colours
+- ❌ Never hard-code RGB / Hex in view code.
+- ✅ Use semantic tokens from `Color.App.*`.
+- New colour? → Add to **Assets.xcassets** + expose via `Color+Tokens.swift`.
+- System foreground: `.primary / .secondary / .tertiary` (no `.black / .white`).
+- Dark-mode comes “for free” via asset catalog; never branch on `colorScheme`.
+
+@Color+Tokens.swift
