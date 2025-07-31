@@ -1,0 +1,311 @@
+---
+description: Always prioritize security over convenience and validate all user inputs.
+globs:
+  - "*.swift"
+alwaysApply: true
+---
+
+# Swift Security Best Practices
+
+You are implementing security-sensitive features in Swift code. Follow these patterns to create secure, robust applications.
+
+## Data Protection
+
+**Sensitive Data Storage**: Use Keychain for sensitive data:
+```swift
+import Security
+
+class KeychainManager {
+    static let shared = KeychainManager()
+
+    func savePassword(_ password: String, for account: String) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecValueData as String: password.data(using: .utf8)!,
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        ]
+
+        let status = SecItemAdd(query as CFDictionary, nil)
+        guard status == errSecSuccess else {
+            throw KeychainError.saveFailed(status)
+        }
+    }
+
+    func retrievePassword(for account: String) throws -> String {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+
+        guard status == errSecSuccess,
+              let data = result as? Data,
+              let password = String(data: data, encoding: .utf8) else {
+            throw KeychainError.retrieveFailed(status)
+        }
+
+        return password
+    }
+}
+
+enum KeychainError: Error {
+    case saveFailed(OSStatus)
+    case retrieveFailed(OSStatus)
+}
+```
+
+**Secure Random Generation**: Use secure random number generation:
+```swift
+import CryptoKit
+
+class SecureRandom {
+    static func generateToken(length: Int = 32) -> String {
+        var bytes = [UInt8](repeating: 0, count: length)
+        _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
+        return Data(bytes).base64EncodedString()
+    }
+
+    static func generateUUID() -> UUID {
+        return UUID()
+    }
+}
+```
+
+## Input Validation
+
+**String Sanitization**: Validate and sanitize user input:
+```swift
+extension String {
+    var sanitized: String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "<script>", with: "", options: .caseInsensitive)
+            .replacingOccurrences(of: "javascript:", with: "", options: .caseInsensitive)
+    }
+
+    var isValidEmail: Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: self)
+    }
+
+    var isValidPassword: Bool {
+        // At least 8 characters, 1 uppercase, 1 lowercase, 1 number
+        let passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d@$!%*?&]{8,}$"
+        let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
+        return passwordPredicate.evaluate(with: self)
+    }
+}
+```
+
+**URL Validation**: Validate URLs securely:
+```swift
+extension URL {
+    var isSecure: Bool {
+        return self.scheme == "https"
+    }
+
+    var isLocal: Bool {
+        return self.scheme == "file" || self.host == "localhost"
+    }
+
+    static func validateURL(_ string: String) -> URL? {
+        guard let url = URL(string: string),
+              url.isSecure else {
+            return nil
+        }
+        return url
+    }
+}
+```
+
+## Network Security
+
+**HTTPS Enforcement**: Always use HTTPS for network requests:
+```swift
+class SecureNetworkManager {
+    static let shared = SecureNetworkManager()
+
+    func makeSecureRequest<T: Codable>(_ request: URLRequest) async throws -> T {
+        guard let url = request.url, url.isSecure else {
+            throw NetworkError.insecureConnection
+        }
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw NetworkError.invalidResponse
+        }
+
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+}
+
+enum NetworkError: Error {
+    case insecureConnection
+    case invalidResponse
+}
+```
+
+**Certificate Pinning**: Implement certificate pinning for critical APIs:
+```swift
+class CertificatePinningURLSessionDelegate: NSObject, URLSessionDelegate {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        guard let serverTrust = challenge.protectionSpace.serverTrust,
+              let certificate = SecTrustGetCertificateAtIndex(serverTrust, 0) else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+
+        // Compare with pinned certificate
+        let pinnedCertificateData = // Your pinned certificate data
+        let serverCertificateData = SecCertificateCopyData(certificate) as Data
+
+        if pinnedCertificateData == serverCertificateData {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+        }
+    }
+}
+```
+
+## Authentication
+
+**Secure Authentication**: Implement secure authentication patterns:
+```swift
+class AuthenticationManager {
+    static let shared = AuthenticationManager()
+
+    func authenticateUser(email: String, password: String) async throws -> User {
+        // Validate input
+        guard email.isValidEmail else {
+            throw AuthError.invalidEmail
+        }
+
+        guard password.isValidPassword else {
+            throw AuthError.weakPassword
+        }
+
+        // Hash password before transmission
+        let hashedPassword = hashPassword(password)
+
+        // Make secure request
+        let request = createAuthRequest(email: email, password: hashedPassword)
+        return try await SecureNetworkManager.shared.makeSecureRequest(request)
+    }
+
+    private func hashPassword(_ password: String) -> String {
+        let data = Data(password.utf8)
+        let hash = SHA256.hash(data: data)
+        return hash.compactMap { String(format: "%02x", $0) }.joined()
+    }
+}
+
+enum AuthError: Error {
+    case invalidEmail
+    case weakPassword
+    case authenticationFailed
+}
+```
+
+## Data Encryption
+
+**AES Encryption**: Implement AES encryption for sensitive data:
+```swift
+import CryptoKit
+
+class EncryptionManager {
+    static let shared = EncryptionManager()
+
+    func encrypt(_ data: Data, with key: SymmetricKey) throws -> Data {
+        let sealedBox = try AES.GCM.seal(data, using: key)
+        return sealedBox.combined!
+    }
+
+    func decrypt(_ data: Data, with key: SymmetricKey) throws -> Data {
+        let sealedBox = try AES.GCM.SealedBox(combined: data)
+        return try AES.GCM.open(sealedBox, using: key)
+    }
+
+    func generateKey() -> SymmetricKey {
+        return SymmetricKey(size: .bits256)
+    }
+}
+```
+
+## Secure UI Patterns
+
+**Secure Text Entry**: Use secure text fields for sensitive input:
+```swift
+struct SecurePasswordField: View {
+    @Binding var password: String
+    let placeholder: String
+
+    var body: some View {
+        SecureField(placeholder, text: $password)
+            .textContentType(.password)
+            .autocapitalization(.none)
+            .disableAutocorrection(true)
+    }
+}
+```
+
+**Biometric Authentication**: Implement biometric authentication:
+```swift
+import LocalAuthentication
+
+class BiometricAuthManager {
+    static let shared = BiometricAuthManager()
+
+    func authenticateWithBiometrics() async throws -> Bool {
+        let context = LAContext()
+        var error: NSError?
+
+        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
+            throw BiometricError.notAvailable
+        }
+
+        return try await withCheckedThrowingContinuation { continuation in
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Authenticate to access secure data") { success, error in
+                if let error = error {
+                    continuation.resume(throwing: BiometricError.authenticationFailed(error))
+                } else {
+                    continuation.resume(returning: success)
+                }
+            }
+        }
+    }
+}
+
+enum BiometricError: Error {
+    case notAvailable
+    case authenticationFailed(Error)
+}
+```
+
+## Secure Logging
+
+**Secure Logging**: Avoid logging sensitive information:
+```swift
+class SecureLogger {
+    static func log(_ message: String, level: LogLevel = .info) {
+        // Never log passwords, tokens, or other sensitive data
+        let sanitizedMessage = message.replacingOccurrences(of: "password=[^\\s]+", with: "password=***", options: .regularExpression)
+
+        #if DEBUG
+        print("[\(level)] \(sanitizedMessage)")
+        #endif
+    }
+}
+
+enum LogLevel: String {
+    case debug, info, warning, error
+}
+```
+

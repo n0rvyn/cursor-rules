@@ -1,0 +1,30 @@
+---
+description: Manually triggered rule for professional code refactoring. Invoke with @refactor-swift.
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+  - "**/*.xib"
+  - "**/*.storyboard"
+  - "**/*.xcassets"
+  - "**/*.xcconfig"
+alwaysApply: false
+---
+
+# Professional Refactoring Mandate
+
+You are performing a targeted code refactoring. Your actions are strictly governed by the following mandate.
+
+## Primary Objectives:
+Your goal is to improve the internal quality of the code without altering its external behavior. Focus on one or more of the following:
+1.  **Improve Structure**: Extract reusable functions, views, or components. Decompose large, complex functions or types into smaller, single-responsibility units.
+2.  **Enhance Maintainability**: Improve naming for clarity. Remove dead or commented-out code. Simplify complex conditional logic.
+3.  **Increase Clarity**: Make the code easier to understand for a human developer. Add clarifying comments only where the "why" is not obvious from the code itself.
+4.  **Adherence to Principles**: Ensure the code fully aligns with the standards defined in the `121-swift-core-principles.mdc` rule, especially regarding safety, modern practices, and API design.
+
+## Strict Constraints:
+You are explicitly forbidden from making the following changes:
+-   **No Functional Changes**: The observable behavior of the application must remain identical.
+-   **No Public API Changes**: Do not change the signature (name, parameters, return type) of any `public` or `open` function, property, or type.
+-   **No UI Changes**: The user interface layout, appearance, and interaction must not be altered.
+
+Begin the refactoring process now, adhering strictly to these objectives and constraints.

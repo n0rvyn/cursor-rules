@@ -1,0 +1,281 @@
+---
+description: Always prioritize consistency, reusability, and accessibility in design system components.
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+  - "**/*.xib"
+  - "**/*.storyboard"
+  - "**/*.xcassets"
+  - "**/*.xcconfig"
+alwaysApply: false
+---
+
+# SwiftUI Design System Guidelines
+
+You are creating SwiftUI components and design system elements. Follow these patterns to build consistent, reusable, and maintainable UI components.
+
+## Component Architecture
+
+**Single Responsibility**: Each component should have one clear purpose:
+```swift
+struct PrimaryButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.blue)
+                .cornerRadius(8)
+        }
+    }
+}
+```
+
+**Composition Over Inheritance**: Build complex components from simple ones:
+```swift
+struct CardView<Content: View>: View {
+    let content: Content
+
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        VStack {
+            content
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(radius: 2)
+    }
+}
+```
+
+## Design Token System
+
+**Color Tokens**: Define semantic color tokens:
+```swift
+extension Color {
+    static let primary = Color("PrimaryColor")
+    static let secondary = Color("SecondaryColor")
+    static let background = Color("BackgroundColor")
+    static let surface = Color("SurfaceColor")
+    static let error = Color("ErrorColor")
+    static let success = Color("SuccessColor")
+}
+```
+
+**Typography System**: Create consistent text styles:
+```swift
+extension Font {
+    static let displayLarge = Font.system(size: 32, weight: .bold)
+    static let displayMedium = Font.system(size: 24, weight: .semibold)
+    static let headline = Font.system(size: 18, weight: .semibold)
+    static let body = Font.system(size: 16, weight: .regular)
+    static let caption = Font.system(size: 14, weight: .regular)
+}
+```
+
+**Spacing System**: Use consistent spacing values:
+```swift
+extension CGFloat {
+    static let spacingXS: CGFloat = 4
+    static let spacingS: CGFloat = 8
+    static let spacingM: CGFloat = 16
+    static let spacingL: CGFloat = 24
+    static let spacingXL: CGFloat = 32
+}
+```
+
+## Reusable Components
+
+**Button System**: Create a comprehensive button system:
+```swift
+enum ButtonStyle {
+    case primary
+    case secondary
+    case destructive
+    case ghost
+}
+
+struct DesignSystemButton: View {
+    let title: String
+    let style: ButtonStyle
+    let isLoading: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                if isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                }
+                Text(title)
+            }
+            .font(.headline)
+            .foregroundColor(foregroundColor)
+            .padding(.horizontal, .spacingM)
+            .padding(.vertical, .spacingS)
+            .background(backgroundColor)
+            .cornerRadius(8)
+        }
+        .disabled(isLoading)
+    }
+
+    private var foregroundColor: Color {
+        switch style {
+        case .primary: return .white
+        case .secondary: return .primary
+        case .destructive: return .white
+        case .ghost: return .primary
+        }
+    }
+
+    private var backgroundColor: Color {
+        switch style {
+        case .primary: return .primary
+        case .secondary: return .clear
+        case .destructive: return .error
+        case .ghost: return .clear
+        }
+    }
+}
+```
+
+**Input Components**: Create reusable input fields:
+```swift
+struct DesignSystemTextField: View {
+    let title: String
+    let placeholder: String
+    @Binding var text: String
+    let errorMessage: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: .spacingXS) {
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+
+            TextField(placeholder, text: $text)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(errorMessage != nil ? Color.error : Color.clear, lineWidth: 1)
+                )
+
+            if let errorMessage = errorMessage {
+                Text(errorMessage)
+                    .font(.caption)
+                    .foregroundColor(.error)
+            }
+        }
+    }
+}
+```
+
+## Layout Components
+
+**Container Views**: Create flexible container components:
+```swift
+struct ContainerView<Content: View>: View {
+    let padding: EdgeInsets
+    let background: Color
+    let cornerRadius: CGFloat
+    let content: Content
+
+    init(
+        padding: EdgeInsets = EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16),
+        background: Color = Color(.systemBackground),
+        cornerRadius: CGFloat = 12,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.padding = padding
+        self.background = background
+        self.cornerRadius = cornerRadius
+        self.content = content()
+    }
+
+    var body: some View {
+        content
+            .padding(padding)
+            .background(background)
+            .cornerRadius(cornerRadius)
+    }
+}
+```
+
+**List Components**: Create specialized list views:
+```swift
+struct DesignSystemList<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    let data: Data
+    let content: (Data.Element) -> Content
+
+    var body: some View {
+        LazyVStack(spacing: .spacingS) {
+            ForEach(data) { item in
+                content(item)
+                    .padding(.horizontal, .spacingM)
+            }
+        }
+    }
+}
+```
+
+## Animation and Interaction
+
+**Consistent Animations**: Define standard animation curves:
+```swift
+extension Animation {
+    static let standard = Animation.easeInOut(duration: 0.3)
+    static let fast = Animation.easeInOut(duration: 0.15)
+    static let slow = Animation.easeInOut(duration: 0.5)
+}
+```
+
+**Interactive Feedback**: Provide consistent haptic feedback:
+```swift
+struct HapticFeedback {
+    static func selection() {
+        let impactFeedback = UISelectionFeedbackGenerator()
+        impactFeedback.selectionChanged()
+    }
+
+    static func success() {
+        let notificationFeedback = UINotificationFeedbackGenerator()
+        notificationFeedback.notificationOccurred(.success)
+    }
+
+    static func error() {
+        let notificationFeedback = UINotificationFeedbackGenerator()
+        notificationFeedback.notificationOccurred(.error)
+    }
+}
+```
+
+## Accessibility
+
+**Accessibility Support**: Ensure all components are accessible:
+```swift
+struct AccessibleButton: View {
+    let title: String
+    let accessibilityLabel: String
+    let accessibilityHint: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+        }
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityHint(accessibilityHint)
+        .accessibilityAddTraits(.isButton)
+    }
+}
+```
+

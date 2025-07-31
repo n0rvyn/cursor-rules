@@ -1,0 +1,175 @@
+---
+description: Always provide meaningful error messages and implement proper error recovery strategies.
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+  - "**/*.xib"
+  - "**/*.storyboard"
+  - "**/*.xcassets"
+  - "**/*.xcconfig"
+alwaysApply: false
+---
+
+# Swift Error Handling Best Practices
+
+You are implementing error handling in Swift code. Follow these patterns to create robust, maintainable error handling.
+
+## Error Type Design
+
+**Custom Error Types**: Define specific, meaningful error types that conform to `Error`:
+```swift
+enum DataError: Error {
+    case invalidInput(String)
+    case networkFailure(NetworkError)
+    case persistenceError(PersistenceError)
+}
+```
+
+**Error Context**: Include relevant context in error cases:
+- Use associated values to provide debugging information
+- Make error messages human-readable
+- Include error codes for programmatic handling
+
+## Error Propagation Patterns
+
+**Throwing Functions**: Use `throws` for recoverable errors:
+```swift
+func fetchUserData(id: String) throws -> User {
+    guard !id.isEmpty else {
+        throw DataError.invalidInput("User ID cannot be empty")
+    }
+    // Implementation
+}
+```
+
+**Result Type**: Use `Result<T, Error>` for async operations:
+```swift
+func fetchUserData(id: String) async -> Result<User, DataError> {
+    // Implementation
+}
+```
+
+## Error Handling in SwiftUI
+
+**View-Level Handling**: Handle errors gracefully in views:
+```swift
+struct ContentView: View {
+    @State private var errorMessage: String?
+
+    var body: some View {
+        VStack {
+            // Content
+        }
+        .alert("Error", isPresented: .constant(errorMessage != nil)) {
+            Button("OK") { errorMessage = nil }
+        } message: {
+            Text(errorMessage ?? "")
+        }
+    }
+}
+```
+
+**ViewModel Error Handling**: Centralize error handling in view models:
+```swift
+@Observable
+class UserViewModel {
+    var errorMessage: String?
+    var isLoading = false
+
+    func fetchUser() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let user = try await userService.fetchUser()
+            // Handle success
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+```
+
+## Async/Await Error Patterns
+
+**Structured Concurrency**: Use proper error handling with async/await:
+```swift
+func performOperation() async throws -> Result {
+    let task1 = Task { try await operation1() }
+    let task2 = Task { try await operation2() }
+
+    do {
+        let result1 = try await task1.value
+        let result2 = try await task2.value
+        return combineResults(result1, result2)
+    } catch {
+        // Cancel other tasks if one fails
+        task1.cancel()
+        task2.cancel()
+        throw error
+    }
+}
+```
+
+## Error Recovery Strategies
+
+**Retry Logic**: Implement intelligent retry mechanisms:
+```swift
+func fetchWithRetry<T>(_ operation: () async throws -> T, maxRetries: Int = 3) async throws -> T {
+    var lastError: Error?
+
+    for attempt in 1...maxRetries {
+        do {
+            return try await operation()
+        } catch {
+            lastError = error
+            if attempt < maxRetries {
+                try await Task.sleep(nanoseconds: UInt64(pow(2.0, Double(attempt))) * 1_000_000_000)
+            }
+        }
+    }
+
+    throw lastError ?? DataError.networkFailure(.unknown)
+}
+```
+
+## Testing Error Conditions
+
+**Error Testing**: Write tests for error scenarios:
+```swift
+func test_fetchUser_withInvalidID_throwsError() async throws {
+    // Given
+    let invalidID = ""
+
+    // When & Then
+    do {
+        _ = try await userService.fetchUser(id: invalidID)
+        XCTFail("Expected error to be thrown")
+    } catch {
+        XCTAssertTrue(error is DataError)
+        XCTAssertEqual(error as? DataError, .invalidInput("User ID cannot be empty"))
+    }
+}
+```
+
+## Error Logging and Monitoring
+
+**Structured Logging**: Log errors with context:
+```swift
+func logError(_ error: Error, context: String) {
+    Logger.error("\(context): \(error.localizedDescription)")
+    // Additional logging logic
+}
+```
+
+**Error Analytics**: Track error patterns for improvement:
+```swift
+func trackError(_ error: Error, userAction: String) {
+    Analytics.track("error_occurred", properties: [
+        "error_type": String(describing: type(of: error)),
+        "user_action": userAction,
+        "error_message": error.localizedDescription
+    ])
+}
+```
+

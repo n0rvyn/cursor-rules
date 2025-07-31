@@ -1,0 +1,309 @@
+---
+description: Always validate data before saving and handle errors appropriately in SwiftData operations.
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+  - "**/*.xib"
+  - "**/*.storyboard"
+  - "**/*.xcassets"
+  - "**/*.xcconfig"
+alwaysApply: false
+---
+
+# SwiftData Best Practices
+
+You are working with SwiftData for data persistence. Follow these patterns to create efficient, maintainable data models and queries.
+
+## Model Design
+
+**@Model Macro**: Use the `@Model` macro for data models:
+```swift
+@Model
+final class RunLog {
+    var id: UUID
+    var distance: Double
+    var duration: TimeInterval
+    var date: Date
+    var notes: String?
+
+    init(distance: Double, duration: TimeInterval, date: Date = Date(), notes: String? = nil) {
+        self.id = UUID()
+        self.distance = distance
+        self.duration = duration
+        self.date = date
+        self.notes = notes
+    }
+}
+```
+
+**Model Relationships**: Define clear relationships between models:
+```swift
+@Model
+final class User {
+    var id: UUID
+    var name: String
+    var email: String
+    @Relationship(deleteRule: .cascade) var runs: [RunLog] = []
+
+    init(name: String, email: String) {
+        self.id = UUID()
+        self.name = name
+        self.email = email
+    }
+}
+```
+
+**Validation**: Implement model validation:
+```swift
+extension RunLog {
+    var isValid: Bool {
+        distance > 0 && duration > 0
+    }
+
+    var formattedDistance: String {
+        String(format: "%.2f km", distance)
+    }
+
+    var formattedDuration: String {
+        let hours = Int(duration) / 3600
+        let minutes = Int(duration) % 3600 / 60
+        let seconds = Int(duration) % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+}
+```
+
+## Query Patterns
+
+**@Query in Views**: Use `@Query` for reactive data fetching:
+```swift
+struct RunHistoryView: View {
+    @Query(sort: \RunLog.date, order: .reverse) private var runs: [RunLog]
+
+    var body: some View {
+        List(runs) { run in
+            RunRowView(run: run)
+        }
+    }
+}
+```
+
+**Filtered Queries**: Use predicates for filtered data:
+```swift
+struct RecentRunsView: View {
+    @Query(filter: #Predicate<RunLog> { run in
+        run.date > Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+    }, sort: \RunLog.date, order: .reverse) private var recentRuns: [RunLog]
+
+    var body: some View {
+        List(recentRuns) { run in
+            RunRowView(run: run)
+        }
+    }
+}
+```
+
+**Dynamic Queries**: Create queries that adapt to user input:
+```swift
+struct FilteredRunsView: View {
+    @State private var searchText = ""
+
+    var filteredRuns: [RunLog] {
+        if searchText.isEmpty {
+            return runs
+        } else {
+            return runs.filter { run in
+                run.notes?.localizedCaseInsensitiveContains(searchText) == true
+            }
+        }
+    }
+
+    @Query(sort: \RunLog.date, order: .reverse) private var runs: [RunLog]
+
+    var body: some View {
+        List(filteredRuns) { run in
+            RunRowView(run: run)
+        }
+        .searchable(text: $searchText)
+    }
+}
+```
+
+## Data Operations
+
+**CRUD Operations**: Implement standard data operations:
+```swift
+@Observable
+class RunDataManager {
+    let modelContext: ModelContext
+
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+
+    func addRun(_ run: RunLog) throws {
+        modelContext.insert(run)
+        try modelContext.save()
+    }
+
+    func updateRun(_ run: RunLog) throws {
+        try modelContext.save()
+    }
+
+    func deleteRun(_ run: RunLog) throws {
+        modelContext.delete(run)
+        try modelContext.save()
+    }
+
+    func fetchRuns() throws -> [RunLog] {
+        let descriptor = FetchDescriptor<RunLog>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        return try modelContext.fetch(descriptor)
+    }
+}
+```
+
+**Batch Operations**: Perform efficient batch operations:
+```swift
+extension RunDataManager {
+    func deleteOldRuns(before date: Date) throws {
+        let descriptor = FetchDescriptor<RunLog>(
+            predicate: #Predicate<RunLog> { run in
+                run.date < date
+            }
+        )
+        let oldRuns = try modelContext.fetch(descriptor)
+
+        for run in oldRuns {
+            modelContext.delete(run)
+        }
+
+        try modelContext.save()
+    }
+
+    func importRuns(_ runs: [RunLog]) throws {
+        for run in runs {
+            modelContext.insert(run)
+        }
+        try modelContext.save()
+    }
+}
+```
+
+## Error Handling
+
+**Persistence Errors**: Handle SwiftData errors gracefully:
+```swift
+enum PersistenceError: Error, LocalizedError {
+    case saveFailed(Error)
+    case fetchFailed(Error)
+    case deleteFailed(Error)
+    case invalidModel
+
+    var errorDescription: String? {
+        switch self {
+        case .saveFailed(let error):
+            return "Failed to save data: \(error.localizedDescription)"
+        case .fetchFailed(let error):
+            return "Failed to fetch data: \(error.localizedDescription)"
+        case .deleteFailed(let error):
+            return "Failed to delete data: \(error.localizedDescription)"
+        case .invalidModel:
+            return "Invalid model data"
+        }
+    }
+}
+
+extension RunDataManager {
+    func safeSave() throws {
+        do {
+            try modelContext.save()
+        } catch {
+            throw PersistenceError.saveFailed(error)
+        }
+    }
+}
+```
+
+## Performance Optimization
+
+**Fetch Descriptors**: Use efficient fetch descriptors:
+```swift
+extension RunDataManager {
+    func fetchRunsWithLimit(_ limit: Int) throws -> [RunLog] {
+        var descriptor = FetchDescriptor<RunLog>(
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        descriptor.fetchLimit = limit
+        return try modelContext.fetch(descriptor)
+    }
+
+    func fetchRunsInDateRange(from startDate: Date, to endDate: Date) throws -> [RunLog] {
+        let descriptor = FetchDescriptor<RunLog>(
+            predicate: #Predicate<RunLog> { run in
+                run.date >= startDate && run.date <= endDate
+            },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        return try modelContext.fetch(descriptor)
+    }
+}
+```
+
+**Lazy Loading**: Implement lazy loading for large datasets:
+```swift
+struct LazyRunListView: View {
+    @State private var runs: [RunLog] = []
+    @State private var isLoading = false
+
+    var body: some View {
+        List(runs) { run in
+            RunRowView(run: run)
+        }
+        .task {
+            await loadRuns()
+        }
+    }
+
+    @MainActor
+    private func loadRuns() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            runs = try await Task.detached {
+                // Perform fetch in background
+                try RunDataManager.shared.fetchRuns()
+            }.value
+        } catch {
+            // Handle error
+        }
+    }
+}
+```
+
+## Migration and Schema
+
+**Schema Migration**: Handle model changes gracefully:
+```swift
+@Model
+final class RunLog {
+    var id: UUID
+    var distance: Double
+    var duration: TimeInterval
+    var date: Date
+    var notes: String?
+    var weather: String? // New field
+
+    init(distance: Double, duration: TimeInterval, date: Date = Date(), notes: String? = nil, weather: String? = nil) {
+        self.id = UUID()
+        self.distance = distance
+        self.duration = duration
+        self.date = date
+        self.notes = notes
+        self.weather = weather
+    }
+}
+```
+
