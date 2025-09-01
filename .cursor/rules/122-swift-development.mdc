@@ -1,0 +1,183 @@
+---
+description: "122: Swift development workflow including TDD, refactoring, and performance optimization"
+scopes: [chat, edit]
+tags: [swift, tdd, refactoring, performance, development-workflow]
+priority: 122
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+  - "**/*.xib"
+  - "**/*.storyboard"
+  - "**/*.xcassets"
+  - "**/*.xcconfig"
+alwaysApply: false
+---
+
+# Swift Development Workflow
+
+You are following a structured development workflow for Swift projects. This includes Test-Driven Development, professional refactoring, and performance optimization practices.
+
+## 🧪 Test-Driven Development (TDD) Cycle
+
+### Step 1: RED - Write a Failing Test
+- **Based on the user's requirement**, identify the correct test target (e.g., `ProjectNameTests`)
+- **Create a new, single `XCTest` function** that asserts the desired behavior
+- **This test MUST fail initially** because the corresponding implementation code does not yet exist
+- **Inform the user**: "I have written the following failing test in `[FileName.swift]`."
+
+### Step 2: VERIFY RED - Confirm Test Failure
+- **Execute the test suite** using: `xcodebuild test -scheme YourAppScheme -destination 'platform=iOS Simulator,name=iPhone 15' | xcbeautify`
+- **Analyze the output**. Confirm that the newly added test fails and all pre-existing tests pass
+- **Report to the user**: "Test run confirmed. The new test `[testFunctionName]` failed as expected. All other tests passed."
+
+### Step 3: GREEN - Write Code to Pass the Test
+- **Write the minimum amount of production code** necessary to make the failing test pass
+- **Do not add any extra functionality** beyond what is required by the test
+- **Inform the user**: "I have added the minimal implementation code in `[FileName.swift]` to pass the test."
+
+### Step 4: VERIFY GREEN - Confirm Test Success
+- **Execute the test suite again** using the same terminal command
+- **Analyze the output and confirm** that ALL tests now pass
+- **Report to the user**: "Test run confirmed. All tests, including the new one, are now passing."
+
+### Step 5: REFACTOR - Inquire About Refactoring
+- **Present the newly added production code and test code** to the user
+- **Ask the user**: "**The TDD cycle is complete. Would you like me to refactor the new code for improved clarity, structure, or performance?**"
+- **Await user instructions** before performing any refactoring
+
+## 🔄 Professional Refactoring
+
+### Primary Objectives
+Your goal is to improve the internal quality of the code without altering its external behavior. Focus on:
+
+1. **Improve Structure**: Extract reusable functions, views, or components. Decompose large, complex functions or types into smaller, single-responsibility units
+2. **Enhance Maintainability**: Improve naming for clarity. Remove dead or commented-out code. Simplify complex conditional logic
+3. **Increase Clarity**: Make the code easier to understand for a human developer. Add clarifying comments only where the "why" is not obvious from the code itself
+4. **Adherence to Principles**: Ensure the code fully aligns with the standards defined in the core Swift principles
+
+### Strict Constraints
+You are explicitly forbidden from making the following changes:
+- **No Functional Changes**: The observable behavior of the application must remain identical
+- **No Public API Changes**: Do not change the signature (name, parameters, return type) of any `public` or `open` function, property, or type
+- **No UI Changes**: The user interface layout, appearance, and interaction must not be altered
+
+## ⚡ Performance Optimization
+
+### Memory Management
+- **Prefer structs over classes** for simple data models. Structs are copied on assignment, which can be more efficient for small data
+- **Use classes only when you need reference semantics** or inheritance
+- **Avoid retain cycles** with weak/unowned references
+- **Use `[weak self]` in closures** when appropriate
+- **Minimize strong reference cycles**
+
+### Collection Performance
+- **Use `reserveCapacity()`** when you know the final size
+- **Prefer `map`, `filter`, `reduce`** over loops for functional operations
+- **Use `lazy` for large collections** to avoid intermediate allocations
+- **Use `compactMap`** to remove nil values efficiently
+
+### SwiftUI Performance
+- **Use `@State` only for view-local state**
+- **Minimize view body computations**
+- **Use `@MainActor` for UI updates**
+- **Use `LazyVStack` and `LazyHStack`** for large lists
+- **Implement proper `Identifiable` conformance**
+- **Use `ForEach` with stable identifiers**
+
+### Concurrency Performance
+- **Use structured concurrency** for better performance
+- **Avoid blocking the main thread**
+- **Use `Task` for fire-and-forget operations**
+- **Implement proper cancellation**
+- **Use actors for shared mutable state**
+- **Avoid actor isolation violations**
+
+### Profiling and Measurement
+- **Use Xcode Instruments** to identify bottlenecks
+- **Time Profiler**: Measure CPU usage and identify hot paths
+- **Allocations**: Monitor memory usage and identify leaks
+- **Core Animation**: Profile UI performance and rendering
+- **Always measure before and after optimizations** to ensure improvements are meaningful
+
+## 🧪 Testing Best Practices
+
+### Test Structure
+- **Use descriptive test method names**: `test_whenUserTapsRunDetail_shouldNavigateToDetailView()`
+- **Group related tests** using `XCTestCase` subclasses
+- **Use `setUp()` and `tearDown()`** for test preparation and cleanup
+
+### Assertions
+- **Use specific assertions**: `XCTAssertEqual`, `XCTAssertTrue`, `XCTAssertNotNil`
+- **Avoid generic `XCTAssert`** when more specific assertions are available
+- **Use `XCTAssertThrowsError`** for testing error conditions
+
+### Mocking and Dependencies
+- **Use protocols for dependency injection** to enable testing
+- **Create mock objects** for external dependencies
+- **Use `@MainActor`** for UI-related tests
+
+### SwiftUI Testing
+- **Test view models independently** of SwiftUI views
+- **Use `@MainActor`** for UI-related test methods
+- **Test navigation and state changes** through view models
+
+### Performance Testing
+- **Use `XCTestCase.measure`** for performance-critical code
+- **Set appropriate performance baselines**
+- **Test memory usage and leaks**
+
+## 🔧 Development Tools & Commands
+
+### Build Commands
+```bash
+# Swift Package Manager
+swift test
+swift build
+
+# Xcode Projects
+xcodebuild -project ProjectName.xcodeproj -scheme ProjectName -destination 'platform=iOS Simulator,name=iPhone 16 Pro' build
+
+# iOS Device Build
+xcodebuild -project ProjectName.xcodeproj -scheme ProjectName -destination 'platform=iOS,id=DEVICE_UDID' build
+```
+
+### Testing Commands
+```bash
+# Run tests
+xcodebuild test -scheme YourAppScheme -destination 'platform=iOS Simulator,name=iPhone 15' | xcbeautify
+
+# Run specific test
+xcodebuild test -scheme YourAppScheme -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:YourAppTests/YourTestClass/yourTestMethod
+```
+
+### Quality Assurance
+- **After Each Update**: Always build and test after making changes
+- **Check for compilation errors** and fix any issues that arise
+- **Run tests to ensure functionality** and fix any failures
+- **No warnings should be introduced** during development
+
+## 📋 Development Checklist
+
+### Before Making Changes
+- [ ] **Understand the current code structure**
+- [ ] **Identify the root cause of issues**
+- [ ] **Plan changes that address the actual problem**
+- [ ] **Consider the impact on existing functionality**
+
+### During Implementation
+- [ ] **Make purposeful, meaningful changes**
+- [ ] **Avoid superficial variable renaming** unless necessary
+- [ ] **Ensure changes improve code quality or functionality**
+- [ ] **Maintain consistency with existing patterns**
+
+### After Making Changes
+- [ ] **Review the changes for completeness**
+- [ ] **Verify the solution addresses the original problem**
+- [ ] **Check for unintended side effects**
+- [ ] **Ensure code follows established patterns**
+- [ ] **Run full build and tests**
+- [ ] **Fix any issues that arise**
+
+---
+
+**Remember**: Follow the TDD cycle strictly, refactor professionally, and always measure performance improvements. Quality and maintainability are the primary goals.

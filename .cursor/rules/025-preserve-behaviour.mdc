@@ -1,8 +1,10 @@
 ---
-description: "Keep existing functionality intact & minimise diffs"
+description: "025: Keep existing functionality intact & minimise diffs"
+scopes: [chat, edit]
+tags: ["safety", "compat"]
+priority: 25
 globs: ["src/**/*.*", "plugins/**/*.*"]
 alwaysApply: true
-tags: ["safety", "compat"]
 ---
 
 ## Behaviour-Preservation

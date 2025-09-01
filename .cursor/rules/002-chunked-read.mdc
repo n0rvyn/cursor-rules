@@ -1,7 +1,10 @@
 ---
 description: "002: Chunked read 200 lines"
+scopes: [chat, edit]
+tags: [file-reading, efficiency]
+priority: 2
 globs:
-alwaysApply: essential
+alwaysApply: true
 ---
 
 ### 📄 Rule: chunked-read-200

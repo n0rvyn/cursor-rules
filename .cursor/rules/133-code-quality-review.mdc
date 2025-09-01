@@ -1,5 +1,8 @@
 ---
-description: Always prioritize quality over quantity and meaningful changes over superficial ones.
+description: "133: Code quality and review standards"
+scopes: [chat, edit]
+tags: [code-quality, review, standards]
+priority: 133
 globs:
   - "*.swift"
 alwaysApply: true

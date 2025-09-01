@@ -1,5 +1,8 @@
 ---
-description: Always maintain clear separation between design system and business logic components.
+description: "134: Architecture and design system guidelines"
+scopes: [chat, edit]
+tags: [architecture, design-system, separation]
+priority: 134
 globs:
   - "*.swift"
 alwaysApply: true

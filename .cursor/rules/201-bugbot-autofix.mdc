@@ -2,7 +2,7 @@
 description: "200: Responding to BugBot PR comments"
 scopes: [chat]
 tags: [bugbot, automation]
-priority: 200
+priority: 201
 alwaysApply: false
 ---
 

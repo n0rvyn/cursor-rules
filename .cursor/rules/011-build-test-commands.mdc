@@ -1,0 +1,274 @@
+---
+description: "011: Specific build and test commands for iOS development workflow"
+scopes: [chat, edit]
+tags: [build, test, xcode, swift, workflow]
+priority: 12
+globs:
+  - "**/*.swift"
+  - "**/*.xcodeproj"
+  - "**/*.xcworkspace"
+  - "**/Package.swift"
+alwaysApply: false
+---
+
+# Build & Test Commands
+
+You are working with iOS/Swift projects and must ensure proper testing and building practices. Follow these guidelines to maintain code quality and catch issues early.
+
+## 🔧 Build Commands
+
+### Xcode Projects
+**Primary Build Command (iPhone 16 Pro, iOS 26 Beta 4):**
+```bash
+xcodebuild \
+  -project Runetic.xcodeproj \
+  -scheme Runetic \
+  -destination 'platform=iOS,id=BB06EE47-904A-47D1-B053-F6A3B32BE6FF' \
+  build
+```
+
+**Fallback Commands:**
+```bash
+# Latest iOS Simulator (automatic detection)
+xcodebuild \
+  -project Runetic.xcodeproj \
+  -scheme Runetic \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+  build
+
+# Generic iOS Simulator
+xcodebuild \
+  -project Runetic.xcodeproj \
+  -scheme Runetic \
+  -destination 'platform=iOS Simulator' \
+  build
+```
+
+**Watch App Build:**
+```bash
+xcodebuild \
+  -project Runetic.xcodeproj \
+  -scheme "RuneticWatch Watch App" \
+  -destination 'platform=watchOS Simulator,name=Apple Watch Series 10 (46mm)' \
+  build
+```
+
+### Swift Package Manager
+**Package Build & Test:**
+```bash
+# Build package
+swift build
+
+# Run tests
+swift test
+
+# Combined build and test
+swift build && swift test
+```
+
+**Outside macOS Environment:**
+```bash
+# When Xcode is not available
+swift build && swift test
+```
+
+## 🧪 Testing Requirements
+
+### After Each Update
+**Mandatory Workflow:**
+1. **Run appropriate build command**
+2. **Check for compilation errors**
+3. **Run tests to ensure functionality**
+4. **Fix any issues that arise**
+
+**Error Handling Process:**
+1. **Analyze error messages carefully**
+2. **Fix the root cause, not just symptoms**
+3. **Re-run tests to confirm fixes**
+4. **Document any significant changes**
+
+### Test Commands
+**Xcode Project Tests:**
+```bash
+# Run unit tests
+xcodebuild test \
+  -project Runetic.xcodeproj \
+  -scheme Runetic \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro'
+
+# Run UI tests
+xcodebuild test \
+  -project Runetic.xcodeproj \
+  -scheme Runetic \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+  -only-testing:RuneticUITests
+```
+
+**Swift Package Tests:**
+```bash
+# Run all tests
+swift test
+
+# Run specific test
+swift test --filter TestClassName
+
+# Run with verbose output
+swift test --verbose
+```
+
+## 🔍 Quality Assurance
+
+### Pre-commit Checks
+**Required Checklist:**
+- [ ] **Code compiles without errors**
+- [ ] **All tests pass**
+- [ ] **No warnings are introduced**
+- [ ] **Performance is maintained**
+
+### Continuous Integration
+**CI Environment Requirements:**
+- [ ] **Build succeeds in clean environment**
+- [ ] **Tests pass on different platforms**
+- [ ] **No dependency issues introduced**
+- [ ] **Code coverage maintained**
+
+## 🚨 Build Failure Resolution
+
+### Common Build Issues
+**Swift Compilation Errors:**
+```bash
+# Clean build folder
+xcodebuild clean -project Runetic.xcodeproj -scheme Runetic
+
+# Reset derived data
+rm -rf ~/Library/Developer/Xcode/DerivedData
+
+# Rebuild
+xcodebuild -project Runetic.xcodeproj -scheme Runetic build
+```
+
+**Dependency Issues:**
+```bash
+# Reset package dependencies
+swift package reset
+
+# Update dependencies
+swift package update
+
+# Resolve dependencies
+swift package resolve
+```
+
+**Simulator Issues:**
+```bash
+# List available simulators
+xcrun simctl list devices
+
+# Boot specific simulator
+xcrun simctl boot "iPhone 16 Pro"
+
+# Shutdown all simulators
+xcrun simctl shutdown all
+```
+
+## 📊 Performance Monitoring
+
+### Build Performance
+**Monitor Build Times:**
+```bash
+# Time the build process
+time xcodebuild -project Runetic.xcodeproj -scheme Runetic build
+
+# Profile build with detailed output
+xcodebuild -project Runetic.xcodeproj -scheme Runetic build -verbose
+```
+
+**Optimize Build Settings:**
+- **Enable parallel builds** in Xcode preferences
+- **Use appropriate deployment targets**
+- **Optimize compiler settings** for development vs release
+
+### Test Performance
+**Monitor Test Execution:**
+```bash
+# Run tests with timing
+swift test --parallel
+
+# Profile slow tests
+swift test --verbose --filter SlowTest
+```
+
+## 🔄 Development Workflow
+
+### Standard Workflow
+1. **Edit code** in Cursor/IDE
+2. **Run build command** to verify compilation
+3. **Run tests** to ensure functionality
+4. **Fix any failures** that arise
+5. **Commit changes** only after green build
+
+### TDD Workflow
+**Every Feature/Bug-fix workflow:**
+1. **Generate or update failing unit tests** first
+2. **Code until all tests pass**
+3. **Place tests in `tests/**`**, directory structure mirrors source code
+4. **Run tests after each change** to ensure functionality
+5. **Fix any failures** that arise
+
+### Hot Reload Development
+**For SwiftUI development:**
+- **Use Xcode previews** for rapid iteration
+- **Leverage SwiftUI live previews** when possible
+- **Test on device** for performance validation
+
+### Debugging Workflow
+**When Build Fails:**
+1. **Read error messages carefully**
+2. **Check for missing imports**
+3. **Verify target membership**
+4. **Check deployment target compatibility**
+5. **Review recent changes**
+
+## 🛠️ Environment Detection
+
+### Platform Detection
+**Check Development Environment:**
+```bash
+# Check if running on macOS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # Use Xcode build commands
+    xcodebuild -project Runetic.xcodeproj -scheme Runetic build
+else
+    # Use Swift Package Manager
+    swift build && swift test
+fi
+```
+
+**Xcode Version Check:**
+```bash
+# Check Xcode version
+xcodebuild -version
+
+# Check available SDKs
+xcodebuild -showsdks
+```
+
+## 📝 Documentation
+
+### Build Documentation
+**Document Build Requirements:**
+- **Minimum Xcode version**
+- **Required iOS deployment target**
+- **Dependencies and versions**
+- **Build configuration notes**
+
+### Test Documentation
+**Document Test Coverage:**
+- **Unit test coverage percentage**
+- **Integration test scenarios**
+- **UI test coverage**
+- **Performance test benchmarks**
+
+---
+
+**Remember**: Always build and test after making changes. A failing build is not acceptable - fix issues immediately before proceeding with development.

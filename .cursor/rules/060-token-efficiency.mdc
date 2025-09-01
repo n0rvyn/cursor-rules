@@ -1,5 +1,8 @@
 ---
 description: "060: Token efficiency and context management"
+scopes: [chat, edit]
+tags: [token-efficiency, context-management]
+priority: 60
 globs:
 alwaysApply: false
 ---

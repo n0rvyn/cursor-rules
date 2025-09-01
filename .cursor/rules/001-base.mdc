@@ -1,5 +1,8 @@
 ---
 description: "001: Global coding conventions & context order"
+scopes: [chat, edit]
+tags: [coding-style, conventions]
+priority: 1
 globs: ["**/*.py", "**/*.ts"]
 alwaysApply: true
 ---

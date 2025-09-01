@@ -1,5 +1,8 @@
 ---
-description: Always implement features exactly as requested, no more and no less.
+description: "135: Feature implementation guidelines"
+scopes: [chat, edit]
+tags: [feature-implementation, guidelines]
+priority: 135
 globs:
   - "*.swift"
 alwaysApply: true

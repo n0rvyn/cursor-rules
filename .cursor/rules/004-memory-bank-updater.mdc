@@ -1,5 +1,8 @@
 ---
-description: Always maintain a forward-looking perspective in memory bank updates, focusing on what's next rather than just what's been done.
+description: "004: Memory bank update protocol"
+scopes: [chat, edit]
+tags: [memory-bank, documentation]
+priority: 4
 globs:
 alwaysApply: false
 ---

@@ -1,8 +1,15 @@
 ---
-description: "310: Security audit checklist and secure coding practices"
+description: "300: Security audit checklist and secure coding practices"
 scopes: [chat, edit]
 tags: [security, audit]
-priority: 310
+priority: 301
+globs:
+  - "**/*.ts"
+  - "**/*.js"
+  - "**/*.py"
+  - "**/*.go"
+  - "**/*.java"
+  - "**/*.swift"
 alwaysApply: false
 ---
 
@@ -80,6 +87,4 @@ alwaysApply: false
 - [ ] Authorization checks in place
 - [ ] Security headers configured
 - [ ] Dependencies scanned for vulnerabilities
-- [ ] Logging and monitoring active
-
 - [ ] Logging and monitoring active

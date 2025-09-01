@@ -1,0 +1,573 @@
+---
+description: "126: Advanced Swift patterns including error handling, SwiftUI design system, SwiftData, concurrency, security, and documentation"
+scopes: [chat, edit]
+tags: [swift, advanced-patterns, error-handling, swiftui, swiftdata, concurrency, security, documentation]
+priority: 126
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+  - "**/*.xib"
+  - "**/*.storyboard"
+  - "**/*.xcassets"
+  - "**/*.xcconfig"
+alwaysApply: false
+---
+
+# Advanced Swift Patterns
+
+You are working with advanced Swift patterns and frameworks. Follow these comprehensive guidelines for error handling, SwiftUI design systems, SwiftData, concurrency, security, and documentation.
+
+## 🚨 Error Handling Best Practices
+
+### Error Type Design
+**Custom Error Types**: Define specific, meaningful error types that conform to `Error`:
+```swift
+enum DataError: Error {
+    case invalidInput(String)
+    case networkFailure(NetworkError)
+    case persistenceError(PersistenceError)
+}
+```
+
+**Error Context**: Include relevant context in error cases:
+- Use associated values to provide debugging information
+- Make error messages human-readable
+- Include error codes for programmatic handling
+
+### Error Propagation Patterns
+**Throwing Functions**: Use `throws` for recoverable errors:
+```swift
+func fetchUserData(id: String) throws -> User {
+    guard !id.isEmpty else {
+        throw DataError.invalidInput("User ID cannot be empty")
+    }
+    // Implementation
+}
+```
+
+**Result Type**: Use `Result<T, Error>` for async operations:
+```swift
+func fetchUserData(id: String) async -> Result<User, DataError> {
+    // Implementation
+}
+```
+
+### Error Handling in SwiftUI
+**View-Level Handling**: Handle errors gracefully in views:
+```swift
+struct ContentView: View {
+    @State private var errorMessage: String?
+
+    var body: some View {
+        VStack {
+            // Content
+        }
+        .alert("Error", isPresented: .constant(errorMessage != nil)) {
+            Button("OK") { errorMessage = nil }
+        } message: {
+            Text(errorMessage ?? "")
+        }
+    }
+}
+```
+
+**ViewModel Error Handling**: Centralize error handling in view models:
+```swift
+@Observable
+class UserViewModel {
+    var errorMessage: String?
+    var isLoading = false
+
+    func fetchUser() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let user = try await userService.fetchUser()
+            // Handle success
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+```
+
+### Error Recovery Strategies
+**Retry Logic**: Implement intelligent retry mechanisms:
+```swift
+func fetchWithRetry<T>(_ operation: () async throws -> T, maxRetries: Int = 3) async throws -> T {
+    var lastError: Error?
+
+    for attempt in 1...maxRetries {
+        do {
+            return try await operation()
+        } catch {
+            lastError = error
+            if attempt < maxRetries {
+                try await Task.sleep(nanoseconds: UInt64(pow(2.0, Double(attempt))) * 1_000_000_000)
+            }
+        }
+    }
+
+    throw lastError ?? DataError.networkFailure(.unknown)
+}
+```
+
+## 🎨 SwiftUI Design System
+
+### Component Architecture
+**Single Responsibility**: Each component should have one clear purpose:
+```swift
+struct PrimaryButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+                .padding()
+                .background(Color.blue)
+                .cornerRadius(8)
+        }
+    }
+}
+```
+
+**Composition Over Inheritance**: Build complex components from simple ones:
+```swift
+struct CardView<Content: View>: View {
+    let content: Content
+
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        VStack {
+            content
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(12)
+        .shadow(radius: 2)
+    }
+}
+```
+
+### Design Token System
+**Color Tokens**: Define semantic color tokens:
+```swift
+extension Color {
+    static let primary = Color("PrimaryColor")
+    static let secondary = Color("SecondaryColor")
+    static let background = Color("BackgroundColor")
+    static let surface = Color("SurfaceColor")
+    static let error = Color("ErrorColor")
+    static let success = Color("SuccessColor")
+}
+```
+
+**Typography System**: Create consistent text styles:
+```swift
+extension Font {
+    static let displayLarge = Font.system(size: 32, weight: .bold)
+    static let displayMedium = Font.system(size: 24, weight: .semibold)
+    static let headline = Font.system(size: 18, weight: .semibold)
+    static let body = Font.system(size: 16, weight: .regular)
+    static let caption = Font.system(size: 14, weight: .regular)
+}
+```
+
+**Spacing System**: Use consistent spacing values:
+```swift
+extension CGFloat {
+    static let spacingXS: CGFloat = 4
+    static let spacingS: CGFloat = 8
+    static let spacingM: CGFloat = 16
+    static let spacingL: CGFloat = 24
+    static let spacingXL: CGFloat = 32
+}
+```
+
+### Reusable Components
+**Button System**: Create a comprehensive button system:
+```swift
+enum ButtonStyle {
+    case primary
+    case secondary
+    case destructive
+    case ghost
+}
+
+struct DesignSystemButton: View {
+    let title: String
+    let style: ButtonStyle
+    let isLoading: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                if isLoading {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                }
+                Text(title)
+            }
+            .font(.headline)
+            .foregroundColor(foregroundColor)
+            .padding(.horizontal, .spacingM)
+            .padding(.vertical, .spacingS)
+            .background(backgroundColor)
+            .cornerRadius(8)
+        }
+        .disabled(isLoading)
+    }
+
+    private var foregroundColor: Color {
+        switch style {
+        case .primary: return .white
+        case .secondary: return .primary
+        case .destructive: return .white
+        case .ghost: return .primary
+        }
+    }
+
+    private var backgroundColor: Color {
+        switch style {
+        case .primary: return .primary
+        case .secondary: return .clear
+        case .destructive: return .error
+        case .ghost: return .clear
+        }
+    }
+}
+```
+
+## 🗄️ SwiftData Best Practices
+
+### Model Design
+**@Model Macro**: Use the `@Model` macro for data models:
+```swift
+@Model
+final class RunLog {
+    var id: UUID
+    var distance: Double
+    var duration: TimeInterval
+    var date: Date
+    var notes: String?
+
+    init(distance: Double, duration: TimeInterval, date: Date = Date(), notes: String? = nil) {
+        self.id = UUID()
+        self.distance = distance
+        self.duration = duration
+        self.date = date
+        self.notes = notes
+    }
+}
+```
+
+**Model Relationships**: Define clear relationships between models:
+```swift
+@Model
+final class User {
+    var id: UUID
+    var name: String
+    var email: String
+    @Relationship(deleteRule: .cascade) var runs: [RunLog] = []
+
+    init(name: String, email: String) {
+        self.id = UUID()
+        self.name = name
+        self.email = email
+    }
+}
+```
+
+### Data Operations
+**Always validate data before saving** and handle errors appropriately:
+```swift
+func saveRun(_ run: RunLog) async throws {
+    // Validate data
+    guard run.distance > 0 else {
+        throw DataError.invalidInput("Distance must be greater than 0")
+    }
+    
+    guard run.duration > 0 else {
+        throw DataError.invalidInput("Duration must be greater than 0")
+    }
+    
+    // Save to SwiftData
+    do {
+        modelContext.insert(run)
+        try modelContext.save()
+    } catch {
+        throw DataError.persistenceError(.saveFailed(error))
+    }
+}
+```
+
+**Use @Query for data fetching** in views:
+```swift
+struct RunListView: View {
+    @Query(sort: \RunLog.date, order: .reverse) var runs: [RunLog]
+    
+    var body: some View {
+        List(runs) { run in
+            RunRowView(run: run)
+        }
+    }
+}
+```
+
+## ⚡ Swift Concurrency
+
+### Async/Await Fundamentals
+**Function Declaration**: Use `async` for asynchronous functions:
+```swift
+func fetchUserData(id: String) async throws -> User {
+    // Implementation
+}
+```
+
+**Task Creation**: Use `Task` for fire-and-forget operations:
+```swift
+func performBackgroundWork() {
+    Task {
+        do {
+            let result = try await heavyOperation()
+            await MainActor.run {
+                // Update UI on main thread
+            }
+        } catch {
+            // Handle error
+        }
+    }
+}
+```
+
+**MainActor Usage**: Use `@MainActor` for UI updates:
+```swift
+@MainActor
+class UserViewModel: ObservableObject {
+    @Published var user: User?
+    @Published var isLoading = false
+
+    func fetchUser() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            user = try await userService.fetchUser()
+        } catch {
+            // Handle error
+        }
+    }
+}
+```
+
+### Structured Concurrency
+**Task Groups**: Use `TaskGroup` for concurrent operations:
+```swift
+func fetchMultipleUsers(ids: [String]) async throws -> [User] {
+    try await withThrowingTaskGroup(of: User.self) { group in
+        for id in ids {
+            group.addTask {
+                try await userService.fetchUser(id: id)
+            }
+        }
+        
+        var users: [User] = []
+        for try await user in group {
+            users.append(user)
+        }
+        return users
+    }
+}
+```
+
+**Cancellation**: Implement proper cancellation:
+```swift
+func cancellableOperation() async throws -> Result {
+    try await withTaskCancellationHandler {
+        // Perform operation
+    } onCancel: {
+        // Cleanup on cancellation
+    }
+}
+```
+
+## 🔒 Security Best Practices
+
+### Data Protection
+**Sensitive Data Storage**: Use Keychain for sensitive data:
+```swift
+import Security
+
+class KeychainManager {
+    static let shared = KeychainManager()
+
+    func savePassword(_ password: String, for account: String) throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: account,
+            kSecValueData as String: password.data(using: .utf8)!,
+            kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
+        ]
+
+        let status = SecItemAdd(query as CFDictionary, nil)
+        guard status == errSecSuccess else {
+            throw KeychainError.saveFailed(status)
+        }
+    }
+}
+```
+
+### Input Validation
+**String Sanitization**: Validate and sanitize user input:
+```swift
+extension String {
+    var sanitized: String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "<script>", with: "", options: .caseInsensitive)
+            .replacingOccurrences(of: "javascript:", with: "", options: .caseInsensitive)
+    }
+
+    var isValidEmail: Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: self)
+    }
+}
+```
+
+### Secure Authentication
+**Secure Authentication**: Implement secure authentication patterns:
+```swift
+class AuthenticationManager {
+    static let shared = AuthenticationManager()
+
+    func authenticateUser(email: String, password: String) async throws -> User {
+        // Validate input
+        guard email.isValidEmail else {
+            throw AuthError.invalidEmail
+        }
+
+        guard password.isValidPassword else {
+            throw AuthError.weakPassword
+        }
+
+        // Hash password before transmission
+        let hashedPassword = hashPassword(password)
+
+        // Make secure request
+        let request = createAuthRequest(email: email, password: hashedPassword)
+        return try await SecureNetworkManager.shared.makeSecureRequest(request)
+    }
+}
+```
+
+## 📚 Documentation Best Practices
+
+### API Documentation
+**Function Documentation**: Document all public functions with clear descriptions:
+```swift
+/// Fetches user data from the server asynchronously.
+///
+/// This function performs a network request to retrieve user information
+/// based on the provided user ID. The request is made over HTTPS and
+/// includes proper error handling for network failures.
+///
+/// - Parameters:
+///   - id: The unique identifier of the user to fetch
+///   - includeProfile: Whether to include the user's profile information
+///
+/// - Returns: A `User` object containing the user's information
+///
+/// - Throws: `NetworkError.invalidResponse` if the server returns an error,
+///           `NetworkError.noConnection` if the network is unavailable
+///
+/// - Note: This function requires an active internet connection
+///
+/// - Example:
+/// ```swift
+/// let user = try await userService.fetchUser(id: "123", includeProfile: true)
+/// print("User name: \(user.name)")
+/// ```
+func fetchUser(id: String, includeProfile: Bool = false) async throws -> User {
+    // Implementation
+}
+```
+
+### SwiftUI Documentation
+**View Documentation**: Document SwiftUI views:
+```swift
+/// A view that displays a list of user runs with detailed information.
+///
+/// This view presents a scrollable list of run entries, each showing
+/// the distance, duration, and date of the run. Users can tap on any
+/// run to view more details.
+///
+/// - Parameters:
+///   - runs: An array of run data to display
+///   - onRunSelected: A closure called when a run is tapped
+///
+/// - Note: This view automatically handles empty states and loading states.
+///
+/// - Example:
+/// ```swift
+/// RunListView(runs: userRuns) { run in
+///     // Navigate to run detail view
+/// }
+/// ```
+struct RunListView: View {
+    let runs: [Run]
+    let onRunSelected: (Run) -> Void
+
+    var body: some View {
+        // Implementation
+    }
+}
+```
+
+### Error Documentation
+**Error Documentation**: Document custom error types:
+```swift
+/// Errors that can occur during user-related operations.
+///
+/// This enum defines all possible errors that can be thrown by user
+/// service implementations. Each case includes a descriptive message
+/// to help with debugging and user feedback.
+enum UserError: Error, LocalizedError {
+    /// The requested user was not found in the system.
+    case notFound
+
+    /// The provided user data is invalid or incomplete.
+    case invalidData
+
+    /// The user's authentication token has expired.
+    case tokenExpired
+
+    /// A network error occurred while processing the request.
+    case networkError(Error)
+
+    var errorDescription: String? {
+        switch self {
+        case .notFound:
+            return "The requested user was not found"
+        case .invalidData:
+            return "The provided user data is invalid"
+        case .tokenExpired:
+            return "The authentication token has expired"
+        case .networkError(let error):
+            return "Network error: \(error.localizedDescription)"
+        }
+    }
+}
+```
+
+---
+
+**Remember**: These advanced patterns work together to create robust, secure, and maintainable Swift applications. Always prioritize safety, performance, and user experience.

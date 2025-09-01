@@ -1,8 +1,9 @@
 ---
-description: "Require user confirmation before applying changes"
-alwaysApply: true
+description: "027: Require user confirmation before applying changes"
 scopes: [chat]
 tags: ["workflow", "confirm"]
+priority: 27
+alwaysApply: true
 ---
 
 ## Two-Step Apply Protocol

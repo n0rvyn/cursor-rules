@@ -1,7 +1,10 @@
 ---
-description: USE WHEN planning and implementing new features or significant changes. Activates a structured planning phase before coding.
+description: "003: Plan/Act workflow for significant changes"
+scopes: [chat, edit]
+tags: [workflow, planning]
+priority: 3
 globs:
-alwaysApply: essential
+alwaysApply: true
 ---
 
 # Plan/Act Workflow Protocol

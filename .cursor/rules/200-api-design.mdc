@@ -1,9 +1,17 @@
 ---
-description: "210: RESTful API design principles and patterns"
+description: "200: RESTful API design principles and patterns"
 scopes: [chat, edit]
 tags: [api, design-patterns]
-priority: 210
+priority: 200
+globs:
+  - "**/*.ts"
+  - "**/*.js"
+  - "**/*.py"
+  - "**/*.go"
+  - "**/*.java"
+alwaysApply: false
 ---
+
 ## 🎯 Template-First Approach
 - **Express Services**: Use skeleton from @templates/express-service.ts for new API endpoints
 - **Python Services**: Use pattern from @templates/python-service.py for async service classes
@@ -77,6 +85,4 @@ priority: 210
 - Implement pagination for list endpoints (limit/offset or cursor-based)
 - Monitor response times and set SLA targets
 - Compress responses when beneficial
-- Monitor API performance and set SLA targets
 - Use connection pooling for database connections
-
