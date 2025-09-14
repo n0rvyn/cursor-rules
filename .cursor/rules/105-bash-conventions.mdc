@@ -8,6 +8,7 @@ globs:
   - "**/*.bash"
   - "**/.*rc"
   - "**/.*profile"
+alwaysApply: false
 ---
 
 ## 🐚 Shell/Bash-Specific Rules

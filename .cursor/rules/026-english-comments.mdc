@@ -1,9 +1,10 @@
 ---
-alwaysApply: true
-description: "Enforce English-only code comments"
+description: "026: Enforce English-only code comments"
+scopes: [chat, edit]
+tags: [style, i18n, comments]
 globs: ["src/**/*.{ts,tsx,js,py,go,rs,java}"]
 priority: 26
-tags: ["style", "i18n"]
+alwaysApply: true
 ---
 
 ## Comment Language

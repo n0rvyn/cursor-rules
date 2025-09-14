@@ -1,9 +1,10 @@
 ---
-description: "Obsidian Community Compliance"
+description: "220: Obsidian Community Compliance"
+scopes: [chat, edit]
+tags: [obsidian, plugin, community]
 globs: ["**/manifest.json", "**/*.ts", "**/*.md"]
-alwaysApply: false
-tags: ["obsidian", "plugin", "community"]
 priority: 220
+alwaysApply: false
 ---
 
 ## Obsidian Community Plugin Standards

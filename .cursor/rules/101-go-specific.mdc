@@ -1,8 +1,10 @@
 ---
 description: "101: Go-specific conventions"
-globs:
-alwaysApply: false
+scopes: [chat, edit]
+tags: [go, conventions, coding-style]
+globs: ["**/*.go"]
 priority: 101
+alwaysApply: false
 ---
 
 ## 🐹 Go-Specific Rules

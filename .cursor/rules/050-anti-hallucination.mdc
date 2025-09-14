@@ -3,6 +3,7 @@ description: "050: Ten strict guardrails to minimize hallucination"
 scopes: [chat, edit]
 tags: [anti-hallucination, quality]
 priority: 50
+alwaysApply: true
 ---
 
 ## 🛡️ Core Anti-Hallucination Measures

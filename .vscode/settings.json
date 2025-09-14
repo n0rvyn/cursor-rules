@@ -1,5 +1,10 @@
 {
   "workbench.editorAssociations": {
     "*.mdc": "default"
-  }
+  },
+  "files.associations": {
+    "*.mdc": "markdown"
+  },
+  "markdown.preview.breaks": true,
+  "markdown.preview.linkify": true
 }

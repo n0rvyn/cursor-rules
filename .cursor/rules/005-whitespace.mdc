@@ -1,5 +1,7 @@
 ---
 description: "005: Eliminate stray or consecutive blank-line suggestions"
+scopes: [chat, edit]
+tags: [formatting, whitespace, code-quality]
 globs: ["**/*"]
 priority: 5
 alwaysApply: true
