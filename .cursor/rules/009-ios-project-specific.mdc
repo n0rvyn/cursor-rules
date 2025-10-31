@@ -1,7 +1,7 @@
 ---
-description: "009: iOS 26/Swift 6 project-specific rules and WWDC 2025 features"
+description: "009: iOS 18/Swift 6 project-specific rules and WWDC 2024 features"
 scopes: [chat, edit]
-tags: [ios, swift6, wwdc2025, project-specific]
+tags: [ios, swift6, wwdc2024, ios18, project-specific]
 priority: 9
 globs:
   - "**/*.swift"
@@ -13,23 +13,26 @@ globs:
 alwaysApply: true
 ---
 
-# iOS 26/Swift 6 Project-Specific Rules
+# iOS 18/Swift 6 Project-Specific Rules
 
-You are working on an iOS 26/Swift 6 project with WWDC 2025 preview APIs. Follow these project-specific guidelines for optimal development.
+You are working on an iOS 18/Swift 6 project with WWDC 2024 APIs. Follow these project-specific guidelines for optimal development.
 
 ## 🎯 Platform Targets & Build Assumptions
 
 ### Development Environment
-- **Xcode 26 Beta 5** toolchain
-- **Swift 6** language mode
-- **App targets**: iOS 26 (iPhone) and watchOS 26 exclusively
+- **Xcode 16** toolchain
+- **Swift 6** language mode (with strict concurrency checking)
+- **App targets**: iOS 18 (iPhone) and watchOS 11 exclusively
 - **No backwards-compatibility layers** are maintained
 
-### WWDC 2025 Preview APIs Available
-- **ModelActor** for SwiftData concurrency
-- **@Transient** for computed properties
-- **SwiftData v2** semantics and enhanced relationships
-- **Enhanced SwiftUI** navigation and state management
+### iOS 18 / WWDC 2024 Features Available
+- **Swift 6** strict concurrency and data race safety
+- **@Observable** macro for modern state management
+- **SwiftData** with enhanced relationships and concurrency
+- **Enhanced SwiftUI** with new animations and controls
+- **Swift Testing** framework (modern alternative to XCTest)
+- **App Intents** enhancements for Siri and Shortcuts
+- **Interactive Widgets** and Live Activities improvements
 
 ## 🏗️ Architecture Rules
 
@@ -66,9 +69,9 @@ All service classes must be annotated `@MainActor`:
 - **Thread-safe data access** patterns
 
 ### Queries & Predicates
-- **Use 2025 API**: `@Query(sort: [SortDescriptor(...])` instead of key-path shorthand
-- **Modern SwiftData** query patterns
-- **Enhanced relationship** handling
+- **Use modern API**: `@Query(sort: [SortDescriptor(...)])` instead of key-path shorthand
+- **Modern SwiftData** query patterns with predicates
+- **Enhanced relationship** handling with proper inverse relationships
 
 ## 🎨 UI & Design System
 
@@ -85,16 +88,23 @@ All service classes must be annotated `@MainActor`:
 ## 🔧 Build & Development
 
 ### Build Commands
-**Preferred command (iPhone 16 Pro, iOS 26 Beta 4):**
+**Preferred command (iPhone 16 Pro, iOS 18 Simulator):**
 ```bash
 xcodebuild \
   -project RunParse.xcodeproj \
   -scheme RunParse \
-  -destination 'platform=iOS,id=BB06EE47-904A-47D1-B053-F6A3B32BE6FF' \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
   build && swift test
 ```
 
-**Fallback:** If UDID unavailable, target latest available iOS simulator automatically
+**Physical Device:**
+```bash
+xcodebuild \
+  -project RunParse.xcodeproj \
+  -scheme RunParse \
+  -destination 'platform=iOS,id=<YOUR_DEVICE_UDID>' \
+  build
+```
 
 **Outside macOS:** Run `swift build && swift test` to compile package and execute unit tests
 
@@ -124,9 +134,11 @@ xcodebuild \
 - **No speculative enhancements**
 
 ### API Preference
-- **When multiple approaches exist**, prefer APIs, patterns, and frameworks introduced at **WWDC 2025**
+- **When multiple approaches exist**, prefer APIs, patterns, and frameworks introduced at **WWDC 2024**
 - **Unless backward-compatibility requirements** dictate otherwise
-- **Modern Swift patterns** over legacy approaches
+- **Modern Swift 6 patterns** over legacy approaches
+- **Prefer @Observable** over ObservableObject
+- **Use Swift Testing** for new tests when appropriate
 
 ## 📝 Code Conventions
 
@@ -145,15 +157,17 @@ xcodebuild \
 ### Testing Requirements
 - **All changes must pass** build and test suite
 - **No regressions** in existing functionality
-- **Swift 6 compliance** for all new code
-- **iOS 26 compatibility** verification
+- **Swift 6 compliance** for all new code (strict concurrency enabled)
+- **iOS 18 compatibility** verification
+- **Data race safety** verified by Swift 6 compiler
 
 ### Performance Standards
 - **Main thread blocking** ≤ 16ms
-- **SwiftData operations** optimized for iOS 26
+- **SwiftData operations** optimized for iOS 18
 - **Memory management** following Swift 6 patterns
 - **Concurrency safety** with proper actor isolation
+- **Sendable conformance** for types crossing concurrency boundaries
 
 ---
 
-**Remember**: This project uses cutting-edge iOS 26 and Swift 6 features. Always prioritize modern patterns, thread safety, and the latest Apple APIs while maintaining backward compatibility within the iOS 26 ecosystem.
+**Remember**: This project uses cutting-edge iOS 18 and Swift 6 features. Always prioritize modern patterns, data race safety, and the latest Apple APIs. Swift 6's strict concurrency checking helps prevent data races at compile time.

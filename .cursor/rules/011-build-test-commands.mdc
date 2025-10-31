@@ -18,12 +18,21 @@ You are working with iOS/Swift projects and must ensure proper testing and build
 ## 🔧 Build Commands
 
 ### Xcode Projects
-**Primary Build Command (iPhone 16 Pro, iOS 26 Beta 4):**
+**Primary Build Command (iPhone 16 Pro Simulator, iOS 18):**
 ```bash
 xcodebuild \
   -project Runetic.xcodeproj \
   -scheme Runetic \
-  -destination 'platform=iOS,id=BB06EE47-904A-47D1-B053-F6A3B32BE6FF' \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+  build
+```
+
+**Physical Device (replace with your device UDID):**
+```bash
+xcodebuild \
+  -project Runetic.xcodeproj \
+  -scheme Runetic \
+  -destination 'platform=iOS,id=YOUR_DEVICE_UDID' \
   build
 ```
 
