@@ -13,23 +13,27 @@ globs:
 alwaysApply: true
 ---
 
-# iOS 26/Swift 6 Project-Specific Rules
+# iOS 26/Swift 6.2 Project-Specific Rules
 
-You are working on an iOS 26/Swift 6 project with WWDC 2025 preview APIs. Follow these project-specific guidelines for optimal development.
+You are working on an iOS 26/Swift 6.2 project with WWDC 2025 APIs. Follow these project-specific guidelines for optimal development.
 
 ## 🎯 Platform Targets & Build Assumptions
 
 ### Development Environment
-- **Xcode 26 Beta 5** toolchain
-- **Swift 6** language mode
+- **Xcode 26** toolchain (released September 2025)
+- **Swift 6.2** language mode
 - **App targets**: iOS 26 (iPhone) and watchOS 26 exclusively
 - **No backwards-compatibility layers** are maintained
 
-### WWDC 2025 Preview APIs Available
-- **ModelActor** for SwiftData concurrency
-- **@Transient** for computed properties
-- **SwiftData v2** semantics and enhanced relationships
-- **Enhanced SwiftUI** navigation and state management
+### iOS 26 / WWDC 2025 APIs Available
+- **Liquid Glass Design** - New translucent, reflective UI aesthetic
+- **Swift 6.2** with @concurrent attribute and improved async execution
+- **SwiftUI WebView** - Native web content support
+- **Chart3D API** - Interactive 3D data visualizations
+- **Enhanced TabView** with split-toolbar style
+- **Swift Testing** framework - Modern alternative to XCTest
+- **SwiftData** with enhanced relationships and concurrency
+- **Foundation Models** framework for AI integration
 
 ## 🏗️ Architecture Rules
 
@@ -125,8 +129,11 @@ xcodebuild \
 
 ### API Preference
 - **When multiple approaches exist**, prefer APIs, patterns, and frameworks introduced at **WWDC 2025**
-- **Unless backward-compatibility requirements** dictate otherwise
-- **Modern Swift patterns** over legacy approaches
+- **Use Liquid Glass design** for new UI components (or opt-out explicitly with `UIView.appearance().usesLiquidGlass = false`)
+- **Prefer Swift Testing** for new test files over XCTest when appropriate
+- **Use @concurrent** for performance-critical parallel operations
+- **Leverage Swift 6.2** improved async execution that preserves caller's context
+- **Modern Swift 6.2 patterns** over legacy approaches
 
 ## 📝 Code Conventions
 
@@ -151,9 +158,11 @@ xcodebuild \
 ### Performance Standards
 - **Main thread blocking** ≤ 16ms
 - **SwiftData operations** optimized for iOS 26
-- **Memory management** following Swift 6 patterns
+- **Memory management** following Swift 6.2 patterns
 - **Concurrency safety** with proper actor isolation
+- **Use @concurrent** for CPU-intensive parallel tasks (image processing, large dataset operations)
+- **Async execution** preserves caller's context in Swift 6.2 (no unnecessary thread hops)
 
 ---
 
-**Remember**: This project uses cutting-edge iOS 26 and Swift 6 features. Always prioritize modern patterns, thread safety, and the latest Apple APIs while maintaining backward compatibility within the iOS 26 ecosystem.
+**Remember**: This project uses cutting-edge iOS 26 and Swift 6.2 features from WWDC 2025. Always prioritize the Liquid Glass design language, Swift 6.2 concurrency improvements (@concurrent, improved async execution), and modern testing with Swift Testing framework. Leverage these features for performant, safe iOS 26 apps.

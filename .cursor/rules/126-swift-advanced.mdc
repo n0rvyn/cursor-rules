@@ -115,6 +115,89 @@ func fetchWithRetry<T>(_ operation: () async throws -> T, maxRetries: Int = 3) a
 
 ## 🎨 SwiftUI Design System
 
+### 🆕 iOS 26 Liquid Glass Design
+
+**Liquid Glass Aesthetic**: iOS 26 introduces a major visual overhaul with translucent, reflective, and refractive effects:
+```swift
+// Enable Liquid Glass on custom views
+VStack {
+    Text("Hello, World!")
+        .font(.largeTitle)
+}
+.liquidGlassEffect()  // Apply the new glossy, fluid aesthetic
+
+// Disable Liquid Glass for traditional UI (one-year grace period)
+@main
+struct MyApp: App {
+    init() {
+        UIView.appearance().usesLiquidGlass = false
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+```
+
+**Native Controls**: All native SwiftUI controls automatically adapt to Liquid Glass:
+```swift
+Button("Action") { }  // Automatically gets Liquid Glass styling
+TextField("Enter text", text: $text)  // Premium fluid look
+```
+
+### 🆕 SwiftUI WebView (iOS 26)
+**Native web content** support in SwiftUI:
+```swift
+import SwiftUI
+
+// Load from URL
+WebView(url: URL(string: "https://apple.com")!)
+
+// Load from HTML string
+WebView(htmlString: "<h1>Hello</h1><p>Welcome</p>")
+
+// Load from raw data
+WebView(data: htmlData, mimeType: "text/html", encoding: .utf8)
+```
+
+### 🆕 3D Charts (iOS 26)
+**Interactive 3D visualizations** with Swift Charts:
+```swift
+import Charts
+
+Chart3D {
+    ForEach(data) { item in
+        BarMark3D(
+            x: .value("Category", item.category),
+            y: .value("Value", item.value),
+            z: .value("Time", item.timestamp)
+        )
+    }
+}
+.chartStyle(.bar)
+.chart3DRotation(.degrees(45))
+.chartInteraction(enabled: true)
+```
+
+### 🆕 Enhanced TabView (iOS 26)
+**New split-toolbar style** resembling a floating button:
+```swift
+TabView {
+    HomeView()
+        .tabItem {
+            Label("Home", systemImage: "house")
+        }
+
+    ProfileView()
+        .tabItem {
+            Label("Profile", systemImage: "person")
+        }
+}
+.tabViewStyle(.splitToolbar)  // New floating button style
+```
+
 ### Component Architecture
 **Single Responsibility**: Each component should have one clear purpose:
 ```swift

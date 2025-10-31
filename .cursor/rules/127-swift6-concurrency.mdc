@@ -1,0 +1,409 @@
+---
+description: "127: Swift 6.2 concurrency best practices for iOS 26 with @concurrent and improved async execution"
+scopes: [chat, edit]
+tags: [swift62, concurrency, actors, sendable, ios26, xcode26]
+priority: 127
+globs:
+  - "**/*.swift"
+  - "**/*.swiftui"
+alwaysApply: false
+---
+
+# Swift 6.2 Concurrency Best Practices (iOS 26 / Xcode 26)
+
+You are working with Swift 6.2's enhanced concurrency model introduced at WWDC 2025. Follow these patterns to write performant, safe concurrent code for iOS 26.
+
+## 🎯 What's New in Swift 6.2
+
+Swift 6.2 (released September 2025) brings significant concurrency improvements:
+
+- **@concurrent attribute** for explicit parallel execution
+- **MainActor by default** compiler flag option
+- **Improved async execution** preserving caller's context
+- **Enhanced Sendable** support for weak let properties
+- **Region-based isolation** analysis
+
+## 🚀 @concurrent Attribute
+
+### Purpose
+The `@concurrent` attribute explicitly declares that code should run concurrently, making it clear when code runs in parallel versus serialized on an actor.
+
+### Basic Usage
+```swift
+actor DataProcessor {
+    private var cache: [String: Data] = [:]
+
+    // Regular actor method - serialized execution
+    func updateCache(key: String, data: Data) {
+        cache[key] = data
+    }
+
+    // Concurrent execution - runs off the actor's serial executor
+    @concurrent
+    func processLargeDataset(_ items: [Item]) async -> [Result] {
+        // Explicitly runs concurrently
+        // All captured state must be Sendable
+        return items.map { process($0) }
+    }
+}
+```
+
+### When to Use @concurrent
+- **CPU-intensive operations** that can run in parallel
+- **Independent computations** that don't modify actor state
+- **Performance-critical code** that benefits from parallelism
+
+### Requirements
+- All captured state must conform to `Sendable`
+- Cannot directly modify actor-isolated state
+- Introduces a new isolation domain
+
+### Example: Image Processing
+```swift
+actor ImageProcessor {
+    @concurrent
+    func applyFilters(to images: [UIImage]) async -> [UIImage] {
+        // Runs concurrently, processing images in parallel
+        await withTaskGroup(of: UIImage.self) { group in
+            for image in images {
+                group.addTask {
+                    await self.applyFilter(to: image)
+                }
+            }
+
+            var processed: [UIImage] = []
+            for await image in group {
+                processed.append(image)
+            }
+            return processed
+        }
+    }
+
+    private func applyFilter(to image: UIImage) async -> UIImage {
+        // Filter implementation
+        return image
+    }
+}
+```
+
+## 🏠 MainActor by Default
+
+### Compiler Flag
+Enable in **Build Settings → Swift Compiler - Custom Flags**:
+```
+-default-isolation MainActor
+```
+
+### Purpose
+Assumes MainActor isolation by default, eliminating false-positive data-race warnings in code that isn't using concurrency.
+
+### Benefits
+```swift
+// Without flag - requires explicit @MainActor
+@MainActor
+class ViewController: UIViewController {
+    var items: [Item] = []
+
+    func updateUI() {
+        // ...
+    }
+}
+
+// With -default-isolation MainActor - implicit isolation
+class ViewController: UIViewController {
+    var items: [Item] = []  // Implicitly @MainActor
+
+    func updateUI() {
+        // No explicit annotation needed
+    }
+}
+```
+
+### When to Use
+- **UI-heavy applications** where most code touches the main thread
+- **Gradual migration** from non-concurrent code
+- **Reducing annotation noise** in view controllers and SwiftUI views
+
+### Opt-Out
+```swift
+// Still on MainActor by default
+class MyViewController: UIViewController {
+
+    // Explicitly opt-out for specific methods
+    nonisolated func backgroundTask() async {
+        // Runs off MainActor
+    }
+}
+```
+
+## ⚡ Improved Async Execution
+
+### The Change
+**Before Swift 6.2**: Nonisolated async methods always jumped to the global executor
+
+**Swift 6.2**: Async functions run in the caller's execution context
+
+### Example
+```swift
+@MainActor
+class ViewModel: ObservableObject {
+    @Published var data: [Item] = []
+
+    func loadData() async {
+        // This stays on MainActor in Swift 6.2!
+        let fetchedData = await fetchFromNetwork()
+
+        // No context switch - still on MainActor
+        self.data = fetchedData  // ✅ Safe, no thread hop
+    }
+}
+
+// This function now runs on the caller's actor
+func fetchFromNetwork() async -> [Item] {
+    // Runs on MainActor when called from MainActor code
+    // No arbitrary thread switch
+    return await URLSession.shared.data(...)
+}
+```
+
+### Benefits
+- **Fewer context switches** = better performance
+- **More predictable execution** context
+- **Aligns with developer intent**
+
+### Migration Note
+If you relied on async jumping to background, use explicit isolation:
+```swift
+nonisolated func fetchData() async -> Data {
+    // Explicitly runs off the current actor
+}
+```
+
+## 📦 Enhanced Sendable Support
+
+### Weak Let Properties
+**New in Swift 6.2**: Weak let properties can be Sendable:
+
+```swift
+final class WeakBox<T: AnyObject>: @unchecked Sendable {
+    weak let value: T?
+
+    init(_ value: T) {
+        self.value = value
+    }
+}
+
+// Usage in actors
+actor NotificationCenter {
+    private var observers: [WeakBox<AnyObject>] = []
+
+    func addObserver(_ observer: AnyObject) {
+        observers.append(WeakBox(observer))
+    }
+}
+```
+
+### Region-Based Isolation
+Swift 6.2 includes improved region-based isolation analysis for safer handling of non-Sendable types:
+
+```swift
+actor DataStore {
+    func process(items: [Item]) async {
+        // Compiler can prove items don't escape the region
+        await withTaskGroup(of: Void.self) { group in
+            for item in items {
+                group.addTask {
+                    // Safe even if Item isn't Sendable
+                    await self.processItem(item)
+                }
+            }
+        }
+    }
+}
+```
+
+## 🎯 Best Practices
+
+### DO ✅
+
+1. **Use @concurrent for performance-critical parallel work**
+   ```swift
+   actor Processor {
+       @concurrent
+       func parallelProcess(_ data: [Data]) async -> [Result] {
+           // Heavy computation runs concurrently
+       }
+   }
+   ```
+
+2. **Enable MainActor by default for UI-heavy apps**
+   ```
+   Build Settings → -default-isolation MainActor
+   ```
+
+3. **Leverage improved async execution**
+   ```swift
+   @MainActor
+   func updateUI() async {
+       let data = await fetchData()  // Stays on MainActor!
+       self.items = data
+   }
+   ```
+
+4. **Use weak let for observer patterns**
+   ```swift
+   final class WeakObserver: @unchecked Sendable {
+       weak let observer: AnyObject?
+   }
+   ```
+
+### DON'T ❌
+
+1. **Don't overuse @concurrent**
+   - Only for truly parallel, CPU-intensive work
+   - Not needed for simple async operations
+
+2. **Don't ignore Sendable requirements**
+   ```swift
+   actor MyActor {
+       @concurrent
+       func process(data: NonSendableType) {  // ❌ Error
+           // data must be Sendable
+       }
+   }
+   ```
+
+3. **Don't assume async always switches threads**
+   - Swift 6.2 preserves caller's context
+   - Be explicit if you need isolation change
+
+## 🔧 Common Patterns
+
+### Pattern 1: Parallel Data Processing
+```swift
+actor DataProcessor {
+    @concurrent
+    func processInParallel(_ items: [Item]) async -> [Result] {
+        await withTaskGroup(of: Result.self) { group in
+            for item in items {
+                group.addTask {
+                    return await self.processOne(item)
+                }
+            }
+
+            var results: [Result] = []
+            for await result in group {
+                results.append(result)
+            }
+            return results
+        }
+    }
+
+    private func processOne(_ item: Item) async -> Result {
+        // Processing logic
+    }
+}
+```
+
+### Pattern 2: MainActor-Heavy View Models
+```swift
+// Enable -default-isolation MainActor
+
+class ItemListViewModel {
+    var items: [Item] = []  // Implicitly @MainActor
+    var isLoading = false
+
+    func loadItems() async {
+        isLoading = true
+        defer { isLoading = false }
+
+        let newItems = await repository.fetchItems()
+        items = newItems  // No MainActor.run needed!
+    }
+
+    nonisolated func analyticsEvent() {
+        // Opt-out for background work
+    }
+}
+```
+
+### Pattern 3: Weak Observer Collections
+```swift
+actor NotificationHub {
+    private var observers: [WeakBox<Observer>] = []
+
+    func addObserver(_ observer: Observer) {
+        observers.append(WeakBox(observer))
+    }
+
+    func notify(event: Event) {
+        observers = observers.filter { $0.value != nil }
+
+        for observer in observers.compactMap({ $0.value }) {
+            observer.handle(event)
+        }
+    }
+}
+
+final class WeakBox<T: AnyObject>: @unchecked Sendable {
+    weak let value: T?
+    init(_ value: T) {
+        self.value = value
+    }
+}
+```
+
+## 🧪 Testing Concurrent Code
+
+### Test @concurrent Methods
+```swift
+import Testing
+
+@Test("Parallel processing completes correctly")
+func testParallelProcessing() async throws {
+    let processor = DataProcessor()
+    let items = (1...100).map { Item(id: $0) }
+
+    let results = await processor.processInParallel(items)
+
+    #expect(results.count == 100)
+}
+```
+
+### Test MainActor Isolation
+```swift
+@Test("View model updates on MainActor")
+@MainActor
+func testViewModelUpdate() async throws {
+    let viewModel = ItemListViewModel()
+
+    await viewModel.loadItems()
+
+    #expect(viewModel.items.count > 0)
+    #expect(viewModel.isLoading == false)
+}
+```
+
+## 📊 Performance Considerations
+
+### When @concurrent Helps
+- **Large dataset processing** (>1000 items)
+- **CPU-bound operations** (image/video processing)
+- **Independent computations** (no shared state)
+
+### When @concurrent Doesn't Help
+- **Small datasets** (<100 items)
+- **I/O-bound operations** (network calls)
+- **Already parallelized code** (TaskGroup)
+
+### Measuring Impact
+```swift
+let start = ContinuousClock.now
+let results = await processor.processInParallel(items)
+let duration = start.duration(to: .now)
+print("Processing took: \(duration)")
+```
+
+---
+
+**Remember**: Swift 6.2's concurrency improvements make async code more performant and predictable. Use @concurrent for parallel work, leverage MainActor by default for UI code, and trust that async execution preserves your context. These features make iOS 26 apps faster and safer.

@@ -141,6 +141,91 @@ You are an expert Swift and iOS/macOS developer. Your primary goal is to produce
 - **Use proper build commands** for the target platform
 - **Monitor build performance** and optimize as needed
 
+## 🆕 Swift 6.2 Language Features (Xcode 26 / iOS 26)
+
+### @concurrent Attribute
+**Explicit concurrent execution** for performance-critical code:
+```swift
+actor DataProcessor {
+    @concurrent
+    func processLargeDataset(_ data: [Item]) async -> [Result] {
+        // Runs concurrently off the actor's serial executor
+        // All captured state must be Sendable
+        return data.map { process($0) }
+    }
+}
+```
+
+### MainActor by Default
+**Enable in Build Settings** for UI-heavy code:
+```swift
+// With -default-isolation MainActor flag
+class ViewController {
+    var items: [Item] = []  // Implicitly @MainActor
+
+    func updateUI() {
+        // No explicit @MainActor needed
+    }
+}
+```
+
+### Improved Async Execution
+**Async methods preserve caller's context**:
+```swift
+@MainActor
+class ViewModel {
+    func loadData() async {
+        // Stays on MainActor
+        let data = await fetchFromNetwork()
+        // Still on MainActor - no context switch!
+        self.items = data
+    }
+}
+
+func fetchFromNetwork() async -> [Item] {
+    // Runs on caller's actor (MainActor in this case)
+}
+```
+
+### Enhanced Sendable Support
+```swift
+// Weak let properties can now be Sendable
+final class WeakBox<T: AnyObject>: @unchecked Sendable {
+    weak let value: T?
+
+    init(_ value: T) {
+        self.value = value
+    }
+}
+```
+
+### Typed Throws (Swift 6)
+**Precise error handling** with type safety:
+```swift
+enum NetworkError: Error {
+    case timeout
+    case invalidResponse
+    case serverError(Int)
+}
+
+func fetchData() throws(NetworkError) -> Data {
+    // Compiler knows exactly which errors can be thrown
+    throw .timeout
+}
+
+// Call site
+do {
+    let data = try fetchData()
+} catch {
+    // error is guaranteed to be NetworkError
+    switch error {
+    case .timeout: handleTimeout()
+    case .invalidResponse: handleInvalidResponse()
+    case .serverError(let code): handleServerError(code)
+    }
+}
+```
+
 ---
 
-**Remember**: These principles work together to create maintainable, performant, and user-friendly iOS applications. Always prioritize clarity, safety, and modern Swift practices.
+**Remember**: These principles work together to create maintainable, performant, and user-friendly iOS applications. Always prioritize clarity, safety, and modern Swift practices. Swift 6.2 brings significant concurrency improvements for iOS 26 development.
